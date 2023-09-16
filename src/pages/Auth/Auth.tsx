@@ -23,7 +23,7 @@ interface InitialValues {
 	password: string;
 }
 
-function Login() {
+function Auth() {
 	type ActiveTabProps = keyof InputDataProps;
 	const navigate = useNavigate();
 	const { hash } = useLocation();
@@ -139,4 +139,4 @@ function Login() {
 	);
 }
 
-export default Login;
+export default Auth;
