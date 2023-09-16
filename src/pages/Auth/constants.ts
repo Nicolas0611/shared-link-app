@@ -1,5 +1,6 @@
 import { TextFieldProps } from '@mui/material';
 
+//Interfaces
 export interface InputDataProps {
 	[key: string]: TextFieldProps[];
 }
@@ -7,6 +8,7 @@ export interface InitialValues {
 	[key: string]: string;
 }
 
+//Data
 export const initialLoginInputData: InitialValues = {
 	email: '',
 	password: '',
