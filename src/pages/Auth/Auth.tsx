@@ -47,14 +47,14 @@ function Auth() {
 				title: 'Login',
 				description: 'Add your details below to get back into the app',
 				subDescription: 'Don’t have an account',
-				linkLabel: 'Login',
+				linkLabel: 'Register',
 				link: '/auth#signup', //!TODO :REPLACE WITH THE REAL PATH CONSTANT
 			},
 			signup: {
 				title: 'Create account',
 				description: 'Let’s get you started sharing your links!',
 				subDescription: 'Already have an account?',
-				linkLabel: 'Register',
+				linkLabel: 'Login',
 				link: '/auth#login', //!TODO :REPLACE WITH THE REAL PATH CONSTANT
 			},
 		};
