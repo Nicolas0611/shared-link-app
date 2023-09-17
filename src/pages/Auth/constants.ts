@@ -14,6 +14,11 @@ export const initialLoginInputData: InitialValues = {
 	password: '',
 };
 
+export const initialRegisterInputData: InitialValues = {
+	...initialLoginInputData,
+	confirm_password: '',
+};
+
 export const inputsAuthData: InputDataProps = {
 	login: [
 		{ type: 'email', label: 'Email', name: 'email', value: 'email' },
@@ -26,13 +31,13 @@ export const inputsAuthData: InputDataProps = {
 	signup: [
 		{ type: 'email', label: 'Email Adress', name: 'email', value: 'email' },
 		{
-			type: 'email',
+			type: 'password',
 			label: 'Create Password',
 			name: 'password',
 			value: 'email',
 		},
 		{
-			type: 'email',
+			type: 'password',
 			label: 'Confirm Password',
 			name: 'confirm_password',
 		},

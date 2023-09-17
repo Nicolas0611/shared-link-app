@@ -14,6 +14,7 @@ import { PATHS, HASH_PATHS } from '../../router/paths';
 import {
 	InputDataProps,
 	initialLoginInputData,
+	initialRegisterInputData,
 	inputsAuthData,
 } from './constants';
 import { AuthLayoutProps } from '../../shared/AuthLayout/interfaces/AuthLayoutInterfaces';
@@ -27,7 +28,7 @@ function Auth() {
 	type ActiveTabProps = keyof InputDataProps;
 	const navigate = useNavigate();
 	const { hash } = useLocation();
-	const [activeTab, setActiveTab] = useState<ActiveTabProps>('');
+	const [activeTab, setActiveTab] = useState<ActiveTabProps>('login');
 
 	useEffect(() => {
 		if (!hash) {
@@ -60,6 +61,14 @@ function Auth() {
 		return layoutLabelContent[hashValue];
 	};
 
+	const InitialValues = (hashValue: 'login' | 'signup') => {
+		const initialFormValues = {
+			login: initialLoginInputData,
+			signup: initialRegisterInputData,
+		};
+		return initialFormValues[hashValue];
+	};
+
 	return (
 		<>
 			<Container
@@ -78,7 +87,8 @@ function Auth() {
 					link={AuthLayoutLabels(activeTab)?.link}
 				>
 					<Formik
-						initialValues={initialLoginInputData}
+						enableReinitialize={true}
+						initialValues={InitialValues(activeTab as 'login' | 'signup')}
 						validate={(values) => {
 							const errors: Partial<InitialValues> = {};
 							if (!values.email) {
@@ -110,7 +120,7 @@ function Auth() {
 										(input: TextFieldProps, index: number) => (
 											<TextField
 												key={index}
-												value={input.name && values[input.name]}
+												value={(input.name && values[input.name]) || ''}
 												onChange={handleChange}
 												name={input.name}
 												type={input.type}
