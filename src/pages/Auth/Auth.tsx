@@ -14,6 +14,7 @@ import { PATHS, HASH_PATHS } from '../../router/paths';
 import {
 	InputDataProps,
 	initialLoginInputData,
+	initialRegisterInputData,
 	inputsAuthData,
 } from './constants';
 import { AuthLayoutProps } from '../../shared/AuthLayout/interfaces/AuthLayoutInterfaces';
@@ -23,11 +24,11 @@ interface InitialValues {
 	password: string;
 }
 
-function Login() {
+function Auth() {
 	type ActiveTabProps = keyof InputDataProps;
 	const navigate = useNavigate();
 	const { hash } = useLocation();
-	const [activeTab, setActiveTab] = useState<ActiveTabProps>('');
+	const [activeTab, setActiveTab] = useState<ActiveTabProps>('login');
 
 	useEffect(() => {
 		if (!hash) {
@@ -46,18 +47,26 @@ function Login() {
 				title: 'Login',
 				description: 'Add your details below to get back into the app',
 				subDescription: 'Don’t have an account',
-				linkLabel: 'Login',
+				linkLabel: 'Register',
 				link: '/auth#signup', //!TODO :REPLACE WITH THE REAL PATH CONSTANT
 			},
 			signup: {
 				title: 'Create account',
 				description: 'Let’s get you started sharing your links!',
 				subDescription: 'Already have an account?',
-				linkLabel: 'Register',
+				linkLabel: 'Login',
 				link: '/auth#login', //!TODO :REPLACE WITH THE REAL PATH CONSTANT
 			},
 		};
 		return layoutLabelContent[hashValue];
+	};
+
+	const InitialValues = (hashValue: 'login' | 'signup') => {
+		const initialFormValues = {
+			login: initialLoginInputData,
+			signup: initialRegisterInputData,
+		};
+		return initialFormValues[hashValue];
 	};
 
 	return (
@@ -78,7 +87,8 @@ function Login() {
 					link={AuthLayoutLabels(activeTab)?.link}
 				>
 					<Formik
-						initialValues={initialLoginInputData}
+						enableReinitialize={true}
+						initialValues={InitialValues(activeTab as 'login' | 'signup')}
 						validate={(values) => {
 							const errors: Partial<InitialValues> = {};
 							if (!values.email) {
@@ -110,7 +120,7 @@ function Login() {
 										(input: TextFieldProps, index: number) => (
 											<TextField
 												key={index}
-												value={input.name && values[input.name]}
+												value={(input.name && values[input.name]) || ''}
 												onChange={handleChange}
 												name={input.name}
 												type={input.type}
@@ -139,4 +149,4 @@ function Login() {
 	);
 }
 
-export default Login;
+export default Auth;

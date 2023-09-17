@@ -17,6 +17,8 @@
     "@mui/icons-material": "^5.14.9",
     "@mui/material": "^5.14.9",
     "@mui/styled-engine-sc": "^5.14.9",
+    "firebase": "^10.4.0",
+    "firebase-tools": "^12.5.4",
     "formik": "^2.4.4",
     "formik-mui": "^5.0.0-alpha.0",
     "localforage": "^1.10.0",
