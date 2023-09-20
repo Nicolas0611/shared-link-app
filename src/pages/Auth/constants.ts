@@ -1,12 +1,7 @@
-import { TextFieldProps } from '@mui/material';
-
-//Interfaces
-export interface InputDataProps {
-	[key: string]: TextFieldProps[];
-}
-export interface InitialValues {
-	[key: string]: string;
-}
+import {
+	InitialValues,
+	InputDataProps,
+} from '../../shared/AuthLayout/interfaces/InputsInterfaces';
 
 //Data
 export const initialLoginInputData: InitialValues = {

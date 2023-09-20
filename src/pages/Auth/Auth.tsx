@@ -12,12 +12,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../shared/AuthLayout/AuthLayout';
 import { PATHS, HASH_PATHS } from '../../router/paths';
 import {
-	InputDataProps,
 	initialLoginInputData,
 	initialRegisterInputData,
 	inputsAuthData,
 } from './constants';
 import { AuthLayoutProps } from '../../shared/AuthLayout/interfaces/AuthLayoutInterfaces';
+import { firebaseAuth } from '../../network/firebaseAuth';
 
 interface InitialValues {
 	email: string;
@@ -25,7 +25,7 @@ interface InitialValues {
 }
 
 function Auth() {
-	type ActiveTabProps = keyof InputDataProps;
+	type ActiveTabProps = 'login' | 'signup';
 	const navigate = useNavigate();
 	const { hash } = useLocation();
 	const [activeTab, setActiveTab] = useState<ActiveTabProps>('login');
@@ -33,9 +33,12 @@ function Auth() {
 	useEffect(() => {
 		if (!hash) {
 			navigate(`${PATHS.AUTH}${HASH_PATHS.LOGIN}`);
+		} else {
+			const tab = hash?.replace('#', '');
+			if (tab === 'login' || tab === 'signup') {
+				setActiveTab(tab);
+			}
 		}
-		const tab = hash?.replace('#', '');
-		setActiveTab(tab);
 	}, [hash]);
 
 	const AuthLayoutLabels = (hashValue: string | number): AuthLayoutProps => {
@@ -61,7 +64,7 @@ function Auth() {
 		return layoutLabelContent[hashValue];
 	};
 
-	const InitialValues = (hashValue: 'login' | 'signup') => {
+	const InitialValues = (hashValue: ActiveTabProps) => {
 		const initialFormValues = {
 			login: initialLoginInputData,
 			signup: initialRegisterInputData,
@@ -88,8 +91,9 @@ function Auth() {
 				>
 					<Formik
 						enableReinitialize={true}
-						initialValues={InitialValues(activeTab as 'login' | 'signup')}
+						initialValues={InitialValues(activeTab)}
 						validate={(values) => {
+							//TODO: ADD VALIDATIONS CORRESPONDING TO SIGNUP AND LOGIN
 							const errors: Partial<InitialValues> = {};
 							if (!values.email) {
 								errors.email = 'Required';
@@ -101,10 +105,13 @@ function Auth() {
 							return errors;
 						}}
 						onSubmit={(values, { setSubmitting }) => {
-							setTimeout(() => {
-								alert(JSON.stringify(values, null, 2));
-								setSubmitting(false);
-							}, 400);
+							const { email, password } = values;
+							//TODO: ADD ONLOADING / ONSUCESS AND ONERROR TO DISPLAY WITH A COGOTAST
+							firebaseAuth({
+								authType: activeTab,
+								values: { email, password },
+							});
+							setSubmitting(false);
 						}}
 					>
 						{({
@@ -116,7 +123,7 @@ function Auth() {
 						}) => (
 							<Form onSubmit={handleSubmit}>
 								<Stack direction="column" spacing={2}>
-									{inputsAuthData[activeTab || 'login'].map(
+									{inputsAuthData[activeTab].map(
 										(input: TextFieldProps, index: number) => (
 											<TextField
 												key={index}
