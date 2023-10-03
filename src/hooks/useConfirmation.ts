@@ -7,7 +7,7 @@ export const useConfirmation = () => {
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 
-	const handleOnSucces = (route: string) => {
+	const handleOnSuccess = (route: string) => {
 		navigate(route);
 		setLoading(false);
 	};
@@ -21,7 +21,7 @@ export const useConfirmation = () => {
 
 	return {
 		loading,
-		handleOnSucces,
+		handleOnSuccess,
 		handleOnError,
 	};
 };

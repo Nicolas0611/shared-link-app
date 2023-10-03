@@ -18,7 +18,7 @@ import {
 	layoutLabelContent,
 } from './constants';
 
-import { firebaseAuth } from '../../network/firebaseAuth';
+import { firebaseAuth } from '../../network/firebaseAuth/firebaseAuth';
 import { useConfirmation } from '../../hooks/useConfirmation';
 
 interface InitialValues {
@@ -32,7 +32,8 @@ function Auth() {
 	const navigate = useNavigate();
 	const { hash } = useLocation();
 	const [activeTab, setActiveTab] = useState<ActiveTabProps>('login');
-	const { handleOnError } = useConfirmation();
+	const { handleOnError, handleOnSuccess } = useConfirmation();
+
 	useEffect(() => {
 		if (!hash) {
 			navigate(`${PATHS.AUTH}${HASH_PATHS.LOGIN}`);
@@ -86,6 +87,7 @@ function Auth() {
 							firebaseAuth({
 								authType: activeTab,
 								values: { email, password },
+								onSuccess: handleOnSuccess,
 								onError: handleOnError,
 							});
 							setSubmitting(false);
@@ -102,20 +104,18 @@ function Auth() {
 						}) => (
 							<Form onSubmit={handleSubmit}>
 								<Stack direction="column" spacing={2}>
-									{inputsAuthData[activeTab].map(
-										(input: TextFieldProps, index: number) => (
-											<TextField
-												key={index}
-												value={(input.name && values[input.name]) || ''}
-												onChange={handleChange}
-												name={input.name}
-												type={input.type}
-												label={input.label}
-												variant="outlined"
-												required={true}
-											/>
-										)
-									)}
+									{inputsAuthData[activeTab].map((input: TextFieldProps) => (
+										<TextField
+											key={input.name}
+											value={(input.name && values[input.name]) || ''}
+											onChange={handleChange}
+											name={input.name}
+											type={input.type}
+											label={input.label}
+											variant="outlined"
+											required={true}
+										/>
+									))}
 									{touched.confirm_password && errors.confirm_password}
 									<Button
 										variant="contained"
