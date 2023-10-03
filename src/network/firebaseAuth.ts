@@ -12,12 +12,17 @@ export interface FirebaseAuthProps {
 		email: string;
 		password: string;
 	};
+	onSucces?: () => void;
+	onError?: (message: string) => void;
 }
 
-export const firebaseAuth = ({ authType, values }: FirebaseAuthProps) => {
+export const firebaseAuth = ({
+	authType,
+	values,
+	onError,
+}: FirebaseAuthProps) => {
 	const { email, password } = values;
 	console.log(authType);
-	//TODO: ADD ONLOADING / ONSUCESS AND ONERROR TO DISPLAY WITH A COGOTAST
 
 	const authFunction = {
 		login: signInWithEmailAndPassword,
@@ -27,9 +32,7 @@ export const firebaseAuth = ({ authType, values }: FirebaseAuthProps) => {
 		.then((userCredential) => {
 			console.log(userCredential);
 		})
-		.catch((error) => {
-			const errorCode = error.code;
-			const errorMessage = error.message;
-			// ..
+		.catch((error: string) => {
+			onError?.(error);
 		});
 };

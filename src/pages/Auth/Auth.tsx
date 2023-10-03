@@ -15,13 +15,16 @@ import {
 	initialLoginInputData,
 	initialRegisterInputData,
 	inputsAuthData,
+	layoutLabelContent,
 } from './constants';
-import { AuthLayoutProps } from '../../shared/AuthLayout/interfaces/AuthLayoutInterfaces';
+
 import { firebaseAuth } from '../../network/firebaseAuth';
+import { useConfirmation } from '../../hooks/useConfirmation';
 
 interface InitialValues {
 	email: string;
 	password: string;
+	confirm_password?: string;
 }
 
 function Auth() {
@@ -29,7 +32,7 @@ function Auth() {
 	const navigate = useNavigate();
 	const { hash } = useLocation();
 	const [activeTab, setActiveTab] = useState<ActiveTabProps>('login');
-
+	const { handleOnError } = useConfirmation();
 	useEffect(() => {
 		if (!hash) {
 			navigate(`${PATHS.AUTH}${HASH_PATHS.LOGIN}`);
@@ -40,29 +43,6 @@ function Auth() {
 			}
 		}
 	}, [hash]);
-
-	const AuthLayoutLabels = (hashValue: string | number): AuthLayoutProps => {
-		type LayoutLabelContentProps = {
-			[key: string]: AuthLayoutProps;
-		};
-		const layoutLabelContent: LayoutLabelContentProps = {
-			login: {
-				title: 'Login',
-				description: 'Add your details below to get back into the app',
-				subDescription: 'Don’t have an account',
-				linkLabel: 'Register',
-				link: '/auth#signup', //!TODO :REPLACE WITH THE REAL PATH CONSTANT
-			},
-			signup: {
-				title: 'Create account',
-				description: 'Let’s get you started sharing your links!',
-				subDescription: 'Already have an account?',
-				linkLabel: 'Login',
-				link: '/auth#login', //!TODO :REPLACE WITH THE REAL PATH CONSTANT
-			},
-		};
-		return layoutLabelContent[hashValue];
-	};
 
 	const InitialValues = (hashValue: ActiveTabProps) => {
 		const initialFormValues = {
@@ -83,38 +63,37 @@ function Auth() {
 				}}
 			>
 				<AuthLayout
-					title={AuthLayoutLabels(activeTab)?.title}
-					description={AuthLayoutLabels(activeTab)?.description}
-					subDescription={AuthLayoutLabels(activeTab)?.subDescription}
-					linkLabel={AuthLayoutLabels(activeTab)?.linkLabel}
-					link={AuthLayoutLabels(activeTab)?.link}
+					title={layoutLabelContent[activeTab]?.title}
+					description={layoutLabelContent[activeTab]?.description}
+					subDescription={layoutLabelContent[activeTab]?.subDescription}
+					linkLabel={layoutLabelContent[activeTab]?.linkLabel}
+					link={layoutLabelContent[activeTab]?.link}
 				>
 					<Formik
 						enableReinitialize={true}
 						initialValues={InitialValues(activeTab)}
 						validate={(values) => {
-							//TODO: ADD VALIDATIONS CORRESPONDING TO SIGNUP AND LOGIN
 							const errors: Partial<InitialValues> = {};
-							if (!values.email) {
-								errors.email = 'Required';
-							} else if (
-								!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-							) {
-								errors.email = 'Invalid email address';
+							if (values.confirm_password) {
+								if (values.password !== values.confirm_password) {
+									errors.confirm_password = 'The password should be the same';
+								}
 							}
 							return errors;
 						}}
 						onSubmit={(values, { setSubmitting }) => {
 							const { email, password } = values;
-							//TODO: ADD ONLOADING / ONSUCESS AND ONERROR TO DISPLAY WITH A COGOTAST
 							firebaseAuth({
 								authType: activeTab,
 								values: { email, password },
+								onError: handleOnError,
 							});
 							setSubmitting(false);
 						}}
 					>
 						{({
+							errors,
+							touched,
 							values,
 							handleChange,
 							handleSubmit,
@@ -133,10 +112,11 @@ function Auth() {
 												type={input.type}
 												label={input.label}
 												variant="outlined"
+												required={true}
 											/>
 										)
 									)}
-
+									{touched.confirm_password && errors.confirm_password}
 									<Button
 										variant="contained"
 										color="primary"

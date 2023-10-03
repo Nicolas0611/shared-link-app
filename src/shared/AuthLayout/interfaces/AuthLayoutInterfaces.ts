@@ -6,3 +6,7 @@ export interface AuthLayoutProps {
 	linkLabel?: 'Login' | 'Register';
 	link?: string;
 }
+
+export type LayoutLabelContentProps = {
+	[key: string]: AuthLayoutProps;
+};

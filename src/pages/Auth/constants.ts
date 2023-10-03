@@ -1,3 +1,4 @@
+import { LayoutLabelContentProps } from '../../shared/AuthLayout/interfaces/AuthLayoutInterfaces';
 import {
 	InitialValues,
 	InputDataProps,
@@ -37,4 +38,21 @@ export const inputsAuthData: InputDataProps = {
 			name: 'confirm_password',
 		},
 	],
+};
+
+export const layoutLabelContent: LayoutLabelContentProps = {
+	login: {
+		title: 'Login',
+		description: 'Add your details below to get back into the app',
+		subDescription: 'Don’t have an account',
+		linkLabel: 'Register',
+		link: '/auth#signup', //!TODO :REPLACE WITH THE REAL PATH CONSTANT
+	},
+	signup: {
+		title: 'Create account',
+		description: 'Let’s get you started sharing your links!',
+		subDescription: 'Already have an account?',
+		linkLabel: 'Login',
+		link: '/auth#login', //!TODO :REPLACE WITH THE REAL PATH CONSTANT
+	},
 };
