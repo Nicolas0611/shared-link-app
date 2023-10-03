@@ -12,56 +12,40 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../shared/AuthLayout/AuthLayout';
 import { PATHS, HASH_PATHS } from '../../router/paths';
 import {
-	InputDataProps,
 	initialLoginInputData,
 	initialRegisterInputData,
 	inputsAuthData,
+	layoutLabelContent,
 } from './constants';
-import { AuthLayoutProps } from '../../shared/AuthLayout/interfaces/AuthLayoutInterfaces';
+
+import { firebaseAuth } from '../../network/firebaseAuth/firebaseAuth';
+import { useConfirmation } from '../../hooks/useConfirmation';
 
 interface InitialValues {
 	email: string;
 	password: string;
+	confirm_password?: string;
 }
 
 function Auth() {
-	type ActiveTabProps = keyof InputDataProps;
+	type ActiveTabProps = 'login' | 'signup';
 	const navigate = useNavigate();
 	const { hash } = useLocation();
 	const [activeTab, setActiveTab] = useState<ActiveTabProps>('login');
+	const { handleOnError, handleOnSuccess } = useConfirmation();
 
 	useEffect(() => {
 		if (!hash) {
 			navigate(`${PATHS.AUTH}${HASH_PATHS.LOGIN}`);
+		} else {
+			const tab = hash?.replace('#', '');
+			if (tab === 'login' || tab === 'signup') {
+				setActiveTab(tab);
+			}
 		}
-		const tab = hash?.replace('#', '');
-		setActiveTab(tab);
 	}, [hash]);
 
-	const AuthLayoutLabels = (hashValue: string | number): AuthLayoutProps => {
-		type LayoutLabelContentProps = {
-			[key: string]: AuthLayoutProps;
-		};
-		const layoutLabelContent: LayoutLabelContentProps = {
-			login: {
-				title: 'Login',
-				description: 'Add your details below to get back into the app',
-				subDescription: 'Don’t have an account',
-				linkLabel: 'Register',
-				link: '/auth#signup', //!TODO :REPLACE WITH THE REAL PATH CONSTANT
-			},
-			signup: {
-				title: 'Create account',
-				description: 'Let’s get you started sharing your links!',
-				subDescription: 'Already have an account?',
-				linkLabel: 'Login',
-				link: '/auth#login', //!TODO :REPLACE WITH THE REAL PATH CONSTANT
-			},
-		};
-		return layoutLabelContent[hashValue];
-	};
-
-	const InitialValues = (hashValue: 'login' | 'signup') => {
+	const InitialValues = (hashValue: ActiveTabProps) => {
 		const initialFormValues = {
 			login: initialLoginInputData,
 			signup: initialRegisterInputData,
@@ -80,34 +64,38 @@ function Auth() {
 				}}
 			>
 				<AuthLayout
-					title={AuthLayoutLabels(activeTab)?.title}
-					description={AuthLayoutLabels(activeTab)?.description}
-					subDescription={AuthLayoutLabels(activeTab)?.subDescription}
-					linkLabel={AuthLayoutLabels(activeTab)?.linkLabel}
-					link={AuthLayoutLabels(activeTab)?.link}
+					title={layoutLabelContent[activeTab]?.title}
+					description={layoutLabelContent[activeTab]?.description}
+					subDescription={layoutLabelContent[activeTab]?.subDescription}
+					linkLabel={layoutLabelContent[activeTab]?.linkLabel}
+					link={layoutLabelContent[activeTab]?.link}
 				>
 					<Formik
 						enableReinitialize={true}
-						initialValues={InitialValues(activeTab as 'login' | 'signup')}
+						initialValues={InitialValues(activeTab)}
 						validate={(values) => {
 							const errors: Partial<InitialValues> = {};
-							if (!values.email) {
-								errors.email = 'Required';
-							} else if (
-								!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-							) {
-								errors.email = 'Invalid email address';
+							if (values.confirm_password) {
+								if (values.password !== values.confirm_password) {
+									errors.confirm_password = 'The password should be the same';
+								}
 							}
 							return errors;
 						}}
 						onSubmit={(values, { setSubmitting }) => {
-							setTimeout(() => {
-								alert(JSON.stringify(values, null, 2));
-								setSubmitting(false);
-							}, 400);
+							const { email, password } = values;
+							firebaseAuth({
+								authType: activeTab,
+								values: { email, password },
+								onSuccess: handleOnSuccess,
+								onError: handleOnError,
+							});
+							setSubmitting(false);
 						}}
 					>
 						{({
+							errors,
+							touched,
 							values,
 							handleChange,
 							handleSubmit,
@@ -116,20 +104,19 @@ function Auth() {
 						}) => (
 							<Form onSubmit={handleSubmit}>
 								<Stack direction="column" spacing={2}>
-									{inputsAuthData[activeTab || 'login'].map(
-										(input: TextFieldProps, index: number) => (
-											<TextField
-												key={index}
-												value={(input.name && values[input.name]) || ''}
-												onChange={handleChange}
-												name={input.name}
-												type={input.type}
-												label={input.label}
-												variant="outlined"
-											/>
-										)
-									)}
-
+									{inputsAuthData[activeTab].map((input: TextFieldProps) => (
+										<TextField
+											key={input.name}
+											value={(input.name && values[input.name]) || ''}
+											onChange={handleChange}
+											name={input.name}
+											type={input.type}
+											label={input.label}
+											variant="outlined"
+											required={true}
+										/>
+									))}
+									{touched.confirm_password && errors.confirm_password}
 									<Button
 										variant="contained"
 										color="primary"
