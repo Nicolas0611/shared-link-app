@@ -1,20 +1,47 @@
 import Login from '../pages/Auth/Auth';
-import { createBrowserRouter } from 'react-router-dom';
-import { PATHS } from './paths';
+import {
+	NonIndexRouteObject,
+	createBrowserRouter,
+	redirect,
+} from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
 
-let routes = [
+import { PATHS, HASH_PATHS } from './paths';
+import Home from '../pages/Home/Home';
+import { auth } from '../libs/firebase/firebase.config';
+
+interface RouteProps extends NonIndexRouteObject {
+	isPrivate?: boolean;
+}
+
+const privateRouteLoader = async () => {
+	const isUserActive = await new Promise((resolve, reject) =>
+		onAuthStateChanged(
+			auth,
+			(user) => resolve(user),
+			(e) => reject(e)
+		)
+	);
+	if (!isUserActive) return redirect(`${PATHS.AUTH}${HASH_PATHS.LOGIN}`);
+
+	return null;
+};
+
+let routes: RouteProps[] = [
 	{
 		path: PATHS.AUTH,
 		element: <Login />,
 	},
 	{
-		path: PATHS.HOME,
-		element: <h1>Home</h1>,
+		path: PATHS.ROOT,
+		element: <Home />,
+		isPrivate: true,
 	},
 ];
 
 routes = routes.map((route) => ({
 	...route,
+	loader: route.isPrivate ? privateRouteLoader : undefined,
 }));
 
 export const router = createBrowserRouter(routes);
