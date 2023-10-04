@@ -15,7 +15,7 @@ function AuthLayout({
 			direction="column"
 			spacing={4}
 			sx={{
-				backgroundColor: 'white',
+				backgroundColor: 'background.paper',
 				maxWidth: '40rem',
 				width: '100%',
 				padding: '3rem 3rem',
