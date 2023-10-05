@@ -1,4 +1,4 @@
-import { LayoutLabelContentProps } from '../../shared/AuthLayout/authlayout.types';
+import { LayoutLabelContentProps } from '../../layout/Auth/auth.types';
 import { InitialValues, InputDataProps } from './auth.types';
 
 //Data

@@ -1,4 +1,4 @@
-import Login from '../pages/Auth/auth';
+import Auth from '../pages/Auth/auth';
 import {
 	NonIndexRouteObject,
 	createBrowserRouter,
@@ -7,12 +7,10 @@ import {
 import { onAuthStateChanged } from 'firebase/auth';
 
 import { PATHS, HASH_PATHS } from './paths';
-import Home from '../pages/Home/home';
 import { auth } from '../libs/firebase/firebase.config';
-
-interface RouteProps extends NonIndexRouteObject {
-	isPrivate?: boolean;
-}
+import Authenticated from '../layout/Authenticated/authenticated.layout';
+import Home from '../pages/Home/Home';
+import Profile from '../pages/Profile/Profile';
 
 const privateRouteLoader = async () => {
 	const isUserActive = await new Promise((resolve, reject) =>
@@ -27,21 +25,25 @@ const privateRouteLoader = async () => {
 	return null;
 };
 
-let routes: RouteProps[] = [
-	{
-		path: PATHS.AUTH,
-		element: <Login />,
-	},
+const routes: NonIndexRouteObject[] = [
 	{
 		path: PATHS.ROOT,
 		element: <Home />,
-		isPrivate: true,
+	},
+	{
+		path: PATHS.PROFILE_DETAILS,
+		element: <Profile />,
 	},
 ];
 
-routes = routes.map((route) => ({
-	...route,
-	loader: route.isPrivate ? privateRouteLoader : undefined,
-}));
-
-export const router = createBrowserRouter(routes);
+export const router = createBrowserRouter([
+	{
+		path: PATHS.AUTH,
+		element: <Auth />,
+	},
+	{
+		element: <Authenticated />,
+		children: routes,
+		loader: privateRouteLoader,
+	},
+]);

@@ -1,11 +1,5 @@
-import Header from '../../shared/Header/header';
-
 function Home() {
-	return (
-		<div>
-			<Header />
-		</div>
-	);
+	return <div>Hola Desde Home</div>;
 }
 
 export default Home;

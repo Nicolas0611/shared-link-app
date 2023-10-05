@@ -1,14 +1,26 @@
+import { useNavigate } from 'react-router-dom';
+
 import { useState } from 'react';
-import { Box, Tabs, Button } from '@mui/material';
-import Tab from '../Tabs/tabs.styled';
+import { Box, Button } from '@mui/material';
 import LinkIcon from '../../assets/LinkIcon';
+import Tabs from '../Tabs/tabs';
+import { PATHS } from '../../router/paths';
 
 function Header() {
-	const [value, setValue] = useState('one');
+	const [value, setValue] = useState(PATHS.ROOT);
+	const navigate = useNavigate();
 
 	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+		event.preventDefault();
 		setValue(newValue);
+		navigate(newValue);
 	};
+
+	const TabsData = [
+		{ value: '/', label: 'Link' },
+		{ value: '/profile-details', label: 'Profile Details' },
+	];
+
 	return (
 		<Box
 			sx={{
@@ -23,17 +35,10 @@ function Header() {
 			}}
 		>
 			<LinkIcon />
-			<Tabs
-				value={value}
-				onChange={handleChange}
-				textColor="primary"
-				aria-label="secondary tabs example"
-				sx={{ '& .MuiTabs-indicator': { display: 'none' } }}
-			>
-				<Tab value="one" label="Item One" />
-				<Tab value="two" label="Item Two" />
-			</Tabs>
-			<Button variant="outlined">Outlined</Button>
+
+			<Tabs tabs={TabsData} handleChange={handleChange} value={value} />
+
+			<Button variant="outlined">Preview</Button>
 		</Box>
 	);
 }

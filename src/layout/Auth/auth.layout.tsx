@@ -1,6 +1,6 @@
 import { Stack, Typography, Link } from '@mui/material';
 
-import { AuthLayoutProps } from './authlayout.types';
+import { AuthLayoutProps } from './auth.types';
 
 function AuthLayout({
 	children,
