@@ -9,7 +9,7 @@ import { Formik, Form } from 'formik';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import AuthLayout from '../../shared/AuthLayout/AuthLayout';
+import AuthLayout from '../../shared/AuthLayout/authlayout';
 import { PATHS, HASH_PATHS } from '../../router/paths';
 import {
 	initialLoginInputData,

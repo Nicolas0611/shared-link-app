@@ -3,7 +3,7 @@ import {
 	signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { auth } from '../../libs/firebase/firebase.config';
-import { FirebaseAuthProps } from './firebaseAuthInterfaces';
+import { FirebaseAuthProps } from './firebase.types';
 import { PATHS } from '../../router/paths';
 
 export const firebaseAuth = ({

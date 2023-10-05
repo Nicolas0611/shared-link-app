@@ -1,4 +1,4 @@
-import Header from '../../shared/Header/Header';
+import Header from '../../shared/Header/header';
 
 function Home() {
 	return (

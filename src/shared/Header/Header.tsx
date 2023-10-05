@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Box, Tabs, Tab, Button } from '@mui/material';
-
+import { Box, Tabs, Button } from '@mui/material';
+import Tab from '../Tabs/tabs.styled';
 import LinkIcon from '../../assets/LinkIcon';
 
 function Header() {

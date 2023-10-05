@@ -1,4 +1,4 @@
-import Login from '../pages/Auth/Auth';
+import Login from '../pages/Auth/auth';
 import {
 	NonIndexRouteObject,
 	createBrowserRouter,
@@ -7,7 +7,7 @@ import {
 import { onAuthStateChanged } from 'firebase/auth';
 
 import { PATHS, HASH_PATHS } from './paths';
-import Home from '../pages/Home/Home';
+import Home from '../pages/Home/home';
 import { auth } from '../libs/firebase/firebase.config';
 
 interface RouteProps extends NonIndexRouteObject {
