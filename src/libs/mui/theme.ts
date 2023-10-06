@@ -33,6 +33,11 @@ const customTheme = createTheme({
 					color: '#633CFF',
 					borderRadius: '0.5rem',
 				},
+				text: {
+					textTransform: 'none',
+					color: '#633CFF',
+					borderRadius: '0.5rem',
+				},
 			},
 		},
 		MuiTab: {
