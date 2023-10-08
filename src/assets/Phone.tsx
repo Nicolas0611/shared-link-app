@@ -3,7 +3,9 @@ import Skeleton from '../shared/Skeleton/skeleton';
 
 function Phone() {
 	/* 	const [tabs, setTabs] = useState({});
-	 */ return (
+	 */
+	//TODO: Add children props so the tabs can render in the phone.wrapper
+	return (
 		<>
 			<svg
 				style={{ position: 'relative' }}
