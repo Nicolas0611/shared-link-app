@@ -55,6 +55,20 @@ const customTheme = createTheme({
 				},
 			},
 		},
+		MuiTextField: {
+			styleOverrides: {
+				root: {
+					backgroundColor: 'white',
+				},
+			},
+		},
+		MuiSelect: {
+			styleOverrides: {
+				root: {
+					backgroundColor: 'white',
+				},
+			},
+		},
 	},
 });
 
