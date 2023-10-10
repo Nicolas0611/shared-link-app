@@ -2,17 +2,39 @@ import { useState } from 'react';
 import { Stack, Typography, Button, TextField } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import Dropdown from '../Dropdown/dropdown';
+import { LinkDraggerProps } from './link.types';
 
-function LinkDragger() {
-	const [age, setAge] = useState('');
+function LinkDragger({ linkId, onDelete, setLinks }: LinkDraggerProps) {
+	const [platforms, setPlatforms] = useState('');
 
-	const handleChange = (event: SelectChangeEvent) => {
-		setAge(event.target.value);
+	const handleDropdownChange = (event: SelectChangeEvent) => {
+		setPlatforms(event.target.value);
+
+		setLinks((prevState) => {
+			const updatedListWithPlatforms = prevState.activeLinks.map((link) => {
+				if (link.linkId === linkId) {
+					return { ...link, data: event.target.value };
+				}
+				return link;
+			});
+
+			return {
+				...prevState,
+				activeLinks: updatedListWithPlatforms,
+			};
+		});
 	};
-	const dropDownItem = [
-		{ label: 'Hola', value: '1' },
-		{ label: 'Hola que más', value: '2' },
+
+	const dropDownItems = [
+		{ label: 'Github', value: 'github' },
+		{ label: 'Frontend Mentor', value: 'fe_mentor' },
+		{ label: 'Twitter', value: 'twitter' },
+		{ label: 'LinkedIn', value: 'linkedin' },
+		{ label: 'Youtube', value: 'youtube' },
+		{ label: 'Facebook', value: 'facebook' },
+		{ label: 'Twitch', value: 'twitch' },
 	];
+
 	return (
 		<Stack
 			spacing={2}
@@ -22,22 +44,29 @@ function LinkDragger() {
 		>
 			<Stack direction="row" alignItems="center" justifyContent="space-between">
 				<Typography variant="body1" color={'text.disabled'}>
-					Link #1
+					{linkId}
 				</Typography>
-				<Button variant="text">Remove</Button>
+				<Button
+					onClick={() => {
+						onDelete(linkId);
+					}}
+					variant="text"
+				>
+					Remove
+				</Button>
 			</Stack>
 			<Dropdown
-				handleChange={handleChange}
-				label="Platform"
-				value={age}
-				dropdownItems={dropDownItem}
+				handleChange={handleDropdownChange}
+				label="Choose a Platform"
+				value={platforms}
+				dropdownItems={dropDownItems}
 			/>
 			<TextField
-				/* 					value={}
-					onChange={} */
-				name="link"
+				value={''}
+				/* 				onChange={}
+				 */ name="link"
 				type="text"
-				label="Link"
+				label="Attach your link"
 				variant="outlined"
 				required={true}
 			/>
