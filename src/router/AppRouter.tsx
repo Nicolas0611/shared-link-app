@@ -1,4 +1,4 @@
-import Auth from '../pages/Auth/auth';
+import Auth from '../pages/Auth/Auth';
 import {
 	NonIndexRouteObject,
 	createBrowserRouter,

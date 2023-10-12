@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import { Stack, Typography, Box, Button } from '@mui/material';
 
 import Application from '../../layout/Application/application.layout';
@@ -6,20 +6,14 @@ import LinkDragger from '../../shared/LinkDragger/link.dragger';
 import { Scrollable } from '../../shared/Scrollable/scrollable.styled';
 import DefaultImage from '../../assets/DefaultImage';
 import Default from '../../shared/Default/default';
-import { Link } from '../../shared/LinkDragger/link.types';
+import { LinkDraggerContext } from '../../context/LinkDragger/link.context';
 
 function Home() {
-	const [links, setLinks] = useState<{
-		activeLinks: Link[];
-		linkCounter: number;
-	}>({
-		activeLinks: [],
-		linkCounter: 1,
-	});
+	const { linkContext, setLinkContext } = useContext(LinkDraggerContext);
 
 	const addLink = () => {
-		if (links.activeLinks.length < 5) {
-			setLinks((prevState) => {
+		if (linkContext.activeLinks.length < 5) {
+			setLinkContext((prevState) => {
 				return {
 					activeLinks: [
 						...prevState.activeLinks,
@@ -31,7 +25,7 @@ function Home() {
 		}
 	};
 	const deleteLink = (linkId: string) => {
-		setLinks((prevState) => ({
+		setLinkContext((prevState) => ({
 			...prevState,
 			activeLinks: prevState.activeLinks.filter(
 				(link) => link.linkId !== linkId
@@ -59,14 +53,13 @@ function Home() {
 				>
 					Add new link
 				</Button>
-				{links.activeLinks.length !== 0 ? (
+				{linkContext.activeLinks.length !== 0 ? (
 					<Scrollable spacing={2}>
-						{links.activeLinks.map((link) => (
+						{linkContext.activeLinks.map((link) => (
 							<LinkDragger
 								key={link.linkId}
 								linkId={link.linkId}
 								onDelete={deleteLink}
-								setLinks={setLinks}
 							/>
 						))}
 					</Scrollable>

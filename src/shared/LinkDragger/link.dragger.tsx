@@ -1,16 +1,18 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Stack, Typography, Button, TextField } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import Dropdown from '../Dropdown/dropdown';
 import { LinkDraggerProps } from './link.types';
+import { LinkDraggerContext } from '../../context/LinkDragger/link.context';
 
-function LinkDragger({ linkId, onDelete, setLinks }: LinkDraggerProps) {
+function LinkDragger({ linkId, onDelete }: LinkDraggerProps) {
 	const [platforms, setPlatforms] = useState('');
+	const { setLinkContext } = useContext(LinkDraggerContext);
 
 	const handleDropdownChange = (event: SelectChangeEvent) => {
 		setPlatforms(event.target.value);
 
-		setLinks((prevState) => {
+		setLinkContext((prevState) => {
 			const updatedListWithPlatforms = prevState.activeLinks.map((link) => {
 				if (link.linkId === linkId) {
 					return { ...link, data: event.target.value };

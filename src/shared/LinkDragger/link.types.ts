@@ -6,7 +6,7 @@ export interface Link {
 export interface LinkDraggerProps {
 	linkId: string;
 	onDelete: (linkId: string) => void;
-	setLinks: (
+	setLinks?: (
 		value: React.SetStateAction<{
 			activeLinks: Link[];
 			linkCounter: number;
