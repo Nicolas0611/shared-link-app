@@ -6,11 +6,15 @@ function Dropdown({
 	label,
 	value,
 	dropdownItems,
+	name = '',
+	isRequired = false,
 }: DropdownProps) {
 	return (
 		<FormControl fullWidth>
 			<InputLabel id="select-label">{label}</InputLabel>
 			<Select
+				name={name}
+				required={isRequired}
 				labelId="select-label"
 				id="demo-simple-select"
 				value={value}

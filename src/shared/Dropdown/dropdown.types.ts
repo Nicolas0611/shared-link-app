@@ -8,5 +8,7 @@ export interface DropdownProps {
 	handleChange: (event: SelectChangeEvent) => void;
 	label: string;
 	value: string;
+	isRequired?: boolean;
+	name: string;
 	dropdownItems: DropdownItems[];
 }

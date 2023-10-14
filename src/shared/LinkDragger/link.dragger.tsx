@@ -1,32 +1,29 @@
+import { useFormikContext } from 'formik';
+
 import { useState, useContext } from 'react';
-import { Stack, Typography, Button, TextField } from '@mui/material';
-import { SelectChangeEvent } from '@mui/material/Select';
-import Dropdown from '../Dropdown/dropdown';
+import {
+	Stack,
+	Typography,
+	Button,
+	TextField,
+	FormControl,
+	InputLabel,
+	Select,
+	MenuItem,
+} from '@mui/material';
+
 import { LinkDraggerProps } from './link.types';
 import { LinkDraggerContext } from '../../context/LinkDragger/link.context';
+import { DropdownItems } from '../Dropdown/dropdown.types';
 
-function LinkDragger({ linkId, onDelete }: LinkDraggerProps) {
-	const [platforms, setPlatforms] = useState('');
-	const { setLinkContext } = useContext(LinkDraggerContext);
-
-	const handleDropdownChange = (event: SelectChangeEvent) => {
-		setPlatforms(event.target.value);
-
-		setLinkContext((prevState) => {
-			const updatedListWithPlatforms = prevState.activeLinks.map((link) => {
-				if (link.linkId === linkId) {
-					return { ...link, data: event.target.value };
-				}
-				return link;
-			});
-
-			return {
-				...prevState,
-				activeLinks: updatedListWithPlatforms,
-			};
-		});
-	};
-
+function LinkDragger({
+	linkId,
+	onDelete,
+	dropdownName,
+	inputName,
+	values,
+	handleInputChange,
+}: LinkDraggerProps) {
 	const dropDownItems = [
 		{ label: 'Github', value: 'github' },
 		{ label: 'Frontend Mentor', value: 'fe_mentor' },
@@ -36,6 +33,7 @@ function LinkDragger({ linkId, onDelete }: LinkDraggerProps) {
 		{ label: 'Facebook', value: 'facebook' },
 		{ label: 'Twitch', value: 'twitch' },
 	];
+	//Todo: do de correct value label in select and input
 
 	return (
 		<Stack
@@ -46,7 +44,7 @@ function LinkDragger({ linkId, onDelete }: LinkDraggerProps) {
 		>
 			<Stack direction="row" alignItems="center" justifyContent="space-between">
 				<Typography variant="body1" color={'text.disabled'}>
-					{linkId}
+					{`Link#${linkId}`}
 				</Typography>
 				<Button
 					onClick={() => {
@@ -57,20 +55,32 @@ function LinkDragger({ linkId, onDelete }: LinkDraggerProps) {
 					Remove
 				</Button>
 			</Stack>
-			<Dropdown
-				handleChange={handleDropdownChange}
-				label="Choose a Platform"
-				value={platforms}
-				dropdownItems={dropDownItems}
-			/>
+			<FormControl fullWidth>
+				<InputLabel id="select-label">Choose a platform</InputLabel>
+				<Select
+					name={dropdownName}
+					labelId="select-label"
+					id="demo-simple-select"
+					defaultValue={''}
+					value={values.platform!}
+					label={'Choose a platform'}
+					onChange={handleInputChange}
+				>
+					{dropDownItems.map((item: DropdownItems) => (
+						<MenuItem key={item.label} value={item.value}>
+							{item.label}
+						</MenuItem>
+					))}
+				</Select>
+			</FormControl>
 			<TextField
-				value={''}
-				/* 				onChange={}
-				 */ name="link"
+				required={true}
+				name={inputName}
 				type="text"
+				value={values.link!}
 				label="Attach your link"
 				variant="outlined"
-				required={true}
+				onChange={handleInputChange}
 			/>
 		</Stack>
 	);
