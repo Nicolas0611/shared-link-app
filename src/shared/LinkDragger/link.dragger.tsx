@@ -1,6 +1,3 @@
-import { useFormikContext } from 'formik';
-
-import { useState, useContext } from 'react';
 import {
 	Stack,
 	Typography,
@@ -13,7 +10,6 @@ import {
 } from '@mui/material';
 
 import { LinkDraggerProps } from './link.types';
-import { LinkDraggerContext } from '../../context/LinkDragger/link.context';
 import { DropdownItems } from '../Dropdown/dropdown.types';
 
 function LinkDragger({
@@ -62,7 +58,7 @@ function LinkDragger({
 					labelId="select-label"
 					id="demo-simple-select"
 					defaultValue={''}
-					value={values.platform!}
+					value={values.platform}
 					label={'Choose a platform'}
 					onChange={handleInputChange}
 				>
@@ -77,7 +73,7 @@ function LinkDragger({
 				required={true}
 				name={inputName}
 				type="text"
-				value={values.link!}
+				value={values.link}
 				label="Attach your link"
 				variant="outlined"
 				onChange={handleInputChange}

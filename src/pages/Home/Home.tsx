@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { Stack, Typography, Box, Button, TextField } from '@mui/material';
-import { Formik, Form, FieldArray, Field } from 'formik';
+import { Stack, Typography, Box, Button } from '@mui/material';
+import { Formik, Form, FieldArray } from 'formik';
 
 import Application from '../../layout/Application/application.layout';
 import LinkDragger from '../../shared/LinkDragger/link.dragger';
@@ -44,12 +44,21 @@ function Home() {
 					{({ values, handleChange }) => (
 						<Form style={{ marginTop: '0', height: '100%' }}>
 							<FieldArray name="data">
-								{({ remove, push }) => (
+								{({
+									remove,
+									push,
+								}: {
+									remove<T>(index: number): T | undefined;
+									push: (obj: { link: string; platform: string }) => void;
+								}) => (
 									<Stack height={'100%'}>
 										<Box sx={{ paddingBottom: '2rem' }}>
 											<Button
 												fullWidth
-												onClick={() => push({ link: '', platform: '' })}
+												onClick={() => {
+													if (values.data.length < 5)
+														push({ link: '', platform: '' });
+												}}
 												variant="outlined"
 												color="primary"
 												size="large"

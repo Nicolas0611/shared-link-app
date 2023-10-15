@@ -5,14 +5,10 @@ export interface Link {
 
 export interface LinkDraggerProps {
 	linkId: number;
-	onDelete: (linkId: string) => void;
-	dropdownName?: string;
-	setLinks?: (
-		value: React.SetStateAction<{
-			activeLinks: Link[];
-			linkCounter: number;
-		}>
-	) => void;
+	onDelete<T>(index: number): T | undefined;
+	dropdownName: string;
+	inputName: string;
+	values: { link: string; platform: string };
 	handleInputChange: {
 		(e: React.ChangeEvent<any>): void;
 		<T = string | React.ChangeEvent<any>>(
