@@ -7,8 +7,9 @@ export type DropdownItems = {
 export interface DropdownProps {
 	handleChange: (event: SelectChangeEvent) => void;
 	label: string;
-	value: string;
+	value?: string | undefined;
 	isRequired?: boolean;
 	name: string;
 	dropdownItems: DropdownItems[];
+	defaultValue: string | undefined;
 }

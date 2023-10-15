@@ -8,18 +8,20 @@ function Dropdown({
 	dropdownItems,
 	name = '',
 	isRequired = false,
+	defaultValue,
 }: DropdownProps) {
 	return (
 		<FormControl fullWidth>
 			<InputLabel id="select-label">{label}</InputLabel>
 			<Select
 				name={name}
-				required={isRequired}
 				labelId="select-label"
 				id="demo-simple-select"
-				value={value}
+				defaultValue={defaultValue}
+				value={value || ''}
 				label={label}
 				onChange={handleChange}
+				required={isRequired}
 			>
 				{dropdownItems.map((item: DropdownItems) => (
 					<MenuItem key={item.label} value={item.value}>

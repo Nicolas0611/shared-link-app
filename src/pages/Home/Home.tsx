@@ -74,7 +74,7 @@ function Home() {
 													gap={2}
 													sx={{
 														maxHeight: {
-															xs: '10rem', // Default value for extra small screens
+															xs: '10rem',
 															sm: '20rem',
 															md: 400,
 															lg: 440,

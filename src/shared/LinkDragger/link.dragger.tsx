@@ -11,6 +11,7 @@ import {
 
 import { LinkDraggerProps } from './link.types';
 import { DropdownItems } from '../Dropdown/dropdown.types';
+import Dropdown from '../Dropdown/dropdown';
 
 function LinkDragger({
 	linkId,
@@ -29,7 +30,7 @@ function LinkDragger({
 		{ label: 'Facebook', value: 'facebook' },
 		{ label: 'Twitch', value: 'twitch' },
 	];
-	//Todo: do de correct value label in select and input
+	//TODO FIX SELECT COMPONENT
 
 	return (
 		<Stack
@@ -51,7 +52,17 @@ function LinkDragger({
 					Remove
 				</Button>
 			</Stack>
-			<FormControl fullWidth>
+
+			<Dropdown
+				dropdownItems={dropDownItems}
+				name={dropdownName}
+				defaultValue={''}
+				value={values.platform}
+				isRequired={true}
+				label={'Choose a platform'}
+				handleChange={handleInputChange}
+			/>
+			{/* 			<FormControl fullWidth>
 				<InputLabel id="select-label">Choose a platform</InputLabel>
 				<Select
 					name={dropdownName}
@@ -68,7 +79,7 @@ function LinkDragger({
 						</MenuItem>
 					))}
 				</Select>
-			</FormControl>
+			</FormControl> */}
 			<TextField
 				required={true}
 				name={inputName}
