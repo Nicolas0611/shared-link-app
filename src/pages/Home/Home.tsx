@@ -7,10 +7,7 @@ import LinkDragger from '../../shared/LinkDragger/link.dragger';
 import { Scrollable } from '../../shared/Scrollable/scrollable.styled';
 import DefaultImage from '../../assets/DefaultImage';
 import Default from '../../shared/Default/default';
-import {
-	DefaultLinksValue,
-	LinkDraggerContext,
-} from '../../context/LinkDragger/link.context';
+import { LinkDraggerContext } from '../../context/LinkDragger/link.context';
 
 function Home() {
 	const { linkContext, setLinkContext } = useContext(LinkDraggerContext);
@@ -24,7 +21,12 @@ function Home() {
 
 	return (
 		<Application>
-			<Stack spacing={4}>
+			<Box
+				height={'100%'}
+				display={'flex'}
+				flexDirection={'column'}
+				gap={{ lg: '1.2rem', xl: '2.2rem' }}
+			>
 				<Box>
 					<Typography variant="h4" sx={{ fontWeight: 'bold' }}>
 						Customize your links
@@ -40,11 +42,11 @@ function Home() {
 					onSubmit={(values) => console.log(values)}
 				>
 					{({ values, handleChange }) => (
-						<Form>
+						<Form style={{ marginTop: '0', height: '100%' }}>
 							<FieldArray name="data">
 								{({ remove, push }) => (
 									<Stack height={'100%'}>
-										<Box sx={{ paddingBottom: '1rem' }}>
+										<Box sx={{ paddingBottom: '2rem' }}>
 											<Button
 												fullWidth
 												onClick={() => push({ link: '', platform: '' })}
@@ -56,32 +58,49 @@ function Home() {
 											</Button>
 										</Box>
 										{values.data.length !== 0 ? (
-											<>
-												<Scrollable maxHeight={'45%'} gap={2}>
-													{values.data.map((content, index) => (
-														<div key={index}>
-															<LinkDragger
-																values={values.data[index]}
-																dropdownName={`data[${index}].platform`}
-																inputName={`data.${index}.link`}
-																key={`Link#_${index}`}
-																linkId={index}
-																onDelete={remove}
-																handleInputChange={handleChange}
-															/>
-														</div>
-													))}
-												</Scrollable>
-												<Button
-													type="submit"
-													variant="contained"
-													color="primary"
-													size="large"
-													disabled={false}
+											<Box sx={{ height: '100%' }}>
+												<Box
+													display="flex"
+													flexDirection="column"
+													gap={2}
+													sx={{
+														maxHeight: {
+															xs: '10rem', // Default value for extra small screens
+															sm: '20rem',
+															md: 400,
+															lg: 440,
+															xl: 'calc(75%)',
+														},
+													}}
 												>
-													Save
-												</Button>
-											</>
+													<Scrollable maxHeight={'inherit'} gap={2}>
+														{values.data.map((content, index) => (
+															<div key={index}>
+																<LinkDragger
+																	values={values.data[index]}
+																	dropdownName={`data[${index}].platform`}
+																	inputName={`data.${index}.link`}
+																	key={`Link#_${index}`}
+																	linkId={index}
+																	onDelete={remove}
+																	handleInputChange={handleChange}
+																/>
+															</div>
+														))}
+													</Scrollable>
+													<Box display="flex" justifyContent="end">
+														<Button
+															type="submit"
+															variant="contained"
+															color="primary"
+															size="large"
+															disabled={false}
+														>
+															Save
+														</Button>
+													</Box>
+												</Box>
+											</Box>
 										) : (
 											<Default
 												Image={DefaultImage}
@@ -95,51 +114,7 @@ function Home() {
 						</Form>
 					)}
 				</Formik>
-
-				{/* {linkContext.activeLinks.length === 0 ? (
-					<Scrollable spacing={2}>
-						<Formik
-							initialValues={{
-								platform: '',
-								link: '',
-							}}
-							onSubmit={(values) => {
-								console.log(values);
-							}}
-						>
-							{({ handleChange, handleSubmit }) => (
-								<Form onSubmit={handleSubmit}>
-									{linkContext.activeLinks.map((link) => (
-										<LinkDragger
-											key={link.linkId}
-											linkId={link.linkId}
-											onDelete={deleteLink}
-											handleInputChange={handleChange}
-										/>
-									))}
-									<Box display="flex" justifyContent="flex-end">
-										<Button
-											type="submit"
-											variant="contained"
-											color="primary"
-											size="large"
-											disabled={false}
-										>
-											Save
-										</Button>
-									</Box>
-								</Form>
-							)}
-						</Formik>
-					</Scrollable>
-				) : (
-					<Default
-						Image={DefaultImage}
-						title="Let’s get you started"
-						subtitle="Use the “Add new link” button to get started. Once you have more than one link, you can reorder and edit them. We’re here to help you share your profiles with everyone!"
-					/>
-				)} */}
-			</Stack>
+			</Box>
 		</Application>
 	);
 }

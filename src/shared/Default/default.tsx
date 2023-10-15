@@ -10,7 +10,7 @@ function Default({ Image, title, subtitle }: DefaultProps) {
 			sx={{ padding: '1.5rem' }}
 			spacing={2}
 			borderRadius="1rem"
-			height="95%"
+			height="100%"
 		>
 			<Image />
 			<Typography variant="h4" sx={{ fontWeight: 'bold' }}>
