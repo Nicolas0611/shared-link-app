@@ -1,16 +1,6 @@
-import {
-	Stack,
-	Typography,
-	Button,
-	TextField,
-	FormControl,
-	InputLabel,
-	Select,
-	MenuItem,
-} from '@mui/material';
+import { Stack, Typography, Button, TextField } from '@mui/material';
 
 import { LinkDraggerProps } from './link.types';
-import { DropdownItems } from '../Dropdown/dropdown.types';
 import Dropdown from '../Dropdown/dropdown';
 
 function LinkDragger({
@@ -62,24 +52,7 @@ function LinkDragger({
 				label={'Choose a platform'}
 				handleChange={handleInputChange}
 			/>
-			{/* 			<FormControl fullWidth>
-				<InputLabel id="select-label">Choose a platform</InputLabel>
-				<Select
-					name={dropdownName}
-					labelId="select-label"
-					id="demo-simple-select"
-					defaultValue={''}
-					value={values.platform}
-					label={'Choose a platform'}
-					onChange={handleInputChange}
-				>
-					{dropDownItems.map((item: DropdownItems) => (
-						<MenuItem key={item.label} value={item.value}>
-							{item.label}
-						</MenuItem>
-					))}
-				</Select>
-			</FormControl> */}
+
 			<TextField
 				required={true}
 				name={inputName}
