@@ -1,6 +1,6 @@
 export interface Link {
-	linkId: string;
-	data: string;
+	link: string;
+	platform: string;
 }
 
 export interface LinkDraggerProps {
@@ -8,7 +8,7 @@ export interface LinkDraggerProps {
 	onDelete<T>(index: number): T | undefined;
 	dropdownName: string;
 	inputName: string;
-	values: { link: string; platform: string };
+	values: Link;
 	handleInputChange: {
 		(e: React.ChangeEvent<any>): void;
 		<T = string | React.ChangeEvent<any>>(

@@ -2,8 +2,7 @@ import { createContext } from 'react';
 import { LinkContext, LinkProps } from './link.types';
 
 export const DefaultLinksValue: LinkProps = {
-	activeLinks: [],
-	linkCounter: 1,
+	data: [],
 };
 
 export const DefaultLinkContext: LinkContext = {

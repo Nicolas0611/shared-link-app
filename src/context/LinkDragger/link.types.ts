@@ -1,8 +1,7 @@
 import { Link } from '../../shared/LinkDragger/link.types';
 
 export interface LinkProps {
-	activeLinks: Link[];
-	linkCounter: number;
+	data: Link[];
 }
 
 export type LinkContext = {

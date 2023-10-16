@@ -11,6 +11,7 @@ import { LinkDraggerContext } from '../../context/LinkDragger/link.context';
 
 function Home() {
 	const { linkContext, setLinkContext } = useContext(LinkDraggerContext);
+
 	type InitialValues = {
 		data: Array<{ link: string; platform: string }>;
 	};
@@ -39,7 +40,9 @@ function Home() {
 
 				<Formik
 					initialValues={initialValues}
-					onSubmit={(values) => console.log(values)}
+					onSubmit={(values) => {
+						console.log(values);
+					}}
 				>
 					{({ values, handleChange }) => (
 						<Form style={{ marginTop: '0', height: '100%' }}>
