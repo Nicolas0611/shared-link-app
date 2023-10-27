@@ -3,12 +3,12 @@ import InfoSkeleton from './Info/info';
 import TabSkeleton from './Tab/Tab';
 import { SkeletonProps } from './skeleton.types';
 
-function Skeleton({ type }: SkeletonProps) {
+function Skeleton({ type, name }: SkeletonProps) {
 	switch (type) {
 		case 'profile':
 			return <CircleSkeleton />;
 		case 'tabs':
-			return <TabSkeleton />;
+			return <TabSkeleton name={name} />;
 		case 'info':
 			return <InfoSkeleton />;
 		default:

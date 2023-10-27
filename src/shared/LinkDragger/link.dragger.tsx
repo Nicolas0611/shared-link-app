@@ -13,14 +13,11 @@ function LinkDragger({
 }: LinkDraggerProps) {
 	const dropDownItems = [
 		{ label: 'Github', value: 'github' },
-		{ label: 'Frontend Mentor', value: 'fe_mentor' },
 		{ label: 'Twitter', value: 'twitter' },
 		{ label: 'LinkedIn', value: 'linkedin' },
 		{ label: 'Youtube', value: 'youtube' },
 		{ label: 'Facebook', value: 'facebook' },
-		{ label: 'Twitch', value: 'twitch' },
 	];
-	//TODO FIX SELECT COMPONENT
 
 	return (
 		<Stack

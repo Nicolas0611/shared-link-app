@@ -4,6 +4,7 @@ export interface Link {
 }
 
 export interface LinkDraggerProps {
+	content: Link;
 	linkId: number;
 	onDelete<T>(index: number): T | undefined;
 	dropdownName: string;

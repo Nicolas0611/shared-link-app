@@ -1,9 +1,14 @@
 import { Stack } from '@mui/material';
+import { useContext } from 'react';
+
 import Skeleton from '../shared/Skeleton/skeleton';
+import { LinkDraggerContext } from '../context/LinkDragger/link.context';
 
 function Phone() {
 	/* 	const [tabs, setTabs] = useState({});
 	 */
+	const { linkContext } = useContext(LinkDraggerContext);
+
 	//TODO: Add children props so the tabs can render in the phone.wrapper
 	return (
 		<>
@@ -34,11 +39,13 @@ function Phone() {
 						<Skeleton type="info" />
 					</Stack>
 					<Stack spacing={2} alignItems={'center'}>
-						<Skeleton type="tabs" />
-						<Skeleton type="tabs" />
-						<Skeleton type="tabs" />
-						<Skeleton type="tabs" />
-						<Skeleton type="tabs" />
+						{linkContext.data.map((link, linkIndex) => (
+							<Skeleton
+								type="tabs"
+								key={`${link.link}_${linkIndex}`}
+								name={link.platform}
+							/>
+						))}
 					</Stack>
 				</Stack>
 			</div>

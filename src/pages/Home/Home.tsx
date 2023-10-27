@@ -8,9 +8,14 @@ import { Scrollable } from '../../shared/Scrollable/scrollable.styled';
 import DefaultImage from '../../assets/DefaultImage';
 import Default from '../../shared/Default/default';
 import { LinkDraggerContext } from '../../context/LinkDragger/link.context';
+import { addCustomLinks } from '../../network/firebaseActions/firebaseUserActions';
+import { Link } from '../../shared/LinkDragger/link.types';
 
 function Home() {
-	const { linkContext, setLinkContext } = useContext(LinkDraggerContext);
+	//todo: CHECK IF THE USER HAVE LINKS, IF IT HAVE LINKS UPDATE THEM.
+	//TODO: TRY TO UPDATE LINKS WITH AN USEFFECT APPROACH
+	//TODO: HANDLE REMOVE
+	const { setLinkContext } = useContext(LinkDraggerContext);
 
 	type InitialValues = {
 		data: Array<{ link: string; platform: string }>;
@@ -40,91 +45,112 @@ function Home() {
 
 				<Formik
 					initialValues={initialValues}
-					onSubmit={(values) => {
-						console.log(values);
+					onSubmit={async (values) => {
+						await addCustomLinks(values);
 					}}
 				>
-					{({ values, handleChange }) => (
-						<Form style={{ marginTop: '0', height: '100%' }}>
-							<FieldArray name="data">
-								{({
-									remove,
-									push,
-								}: {
-									remove<T>(index: number): T | undefined;
-									push: (obj: { link: string; platform: string }) => void;
-								}) => (
-									<Stack height={'100%'}>
-										<Box sx={{ paddingBottom: '2rem' }}>
-											<Button
-												fullWidth
-												onClick={() => {
-													if (values.data.length < 5)
-														push({ link: '', platform: '' });
-												}}
-												variant="outlined"
-												color="primary"
-												size="large"
-											>
-												Add new link
-											</Button>
-										</Box>
-										{values.data.length !== 0 ? (
-											<Box sx={{ height: '100%' }}>
-												<Box
-													display="flex"
-													flexDirection="column"
-													gap={2}
-													sx={{
-														maxHeight: {
-															xs: '10rem',
-															sm: '20rem',
-															md: 400,
-															lg: 440,
-															xl: 'calc(75%)',
-														},
+					{({ values, handleChange }) => {
+						return (
+							<Form style={{ marginTop: '0', height: '100%' }}>
+								<FieldArray name="data">
+									{({
+										remove,
+										push,
+									}: {
+										remove<T>(index: number): T | undefined;
+										push: (obj: { link: string; platform: string }) => void;
+									}) => (
+										<Stack height={'100%'}>
+											<Box sx={{ paddingBottom: '2rem' }}>
+												<Button
+													fullWidth
+													onClick={() => {
+														if (values.data.length < 5) {
+															push({ link: '', platform: '' });
+														}
 													}}
+													variant="outlined"
+													color="primary"
+													size="large"
 												>
-													<Scrollable maxHeight={'inherit'} gap={2}>
-														{values.data.map((content, index) => (
-															<div key={index}>
-																<LinkDragger
-																	values={values.data[index]}
-																	dropdownName={`data[${index}].platform`}
-																	inputName={`data.${index}.link`}
-																	key={`Link#_${index}`}
-																	linkId={index}
-																	onDelete={remove}
-																	handleInputChange={handleChange}
-																/>
-															</div>
-														))}
-													</Scrollable>
-													<Box display="flex" justifyContent="end">
-														<Button
-															type="submit"
-															variant="contained"
-															color="primary"
-															size="large"
-															disabled={false}
-														>
-															Save
-														</Button>
+													Add new link
+												</Button>
+											</Box>
+											{values.data.length !== 0 ? (
+												<Box sx={{ height: '100%' }}>
+													<Box
+														display="flex"
+														flexDirection="column"
+														gap={2}
+														sx={{
+															maxHeight: {
+																xs: '10rem',
+																sm: '20rem',
+																md: 400,
+																lg: 440,
+																xl: 'calc(75%)',
+															},
+														}}
+													>
+														<Scrollable maxHeight={'inherit'} gap={2}>
+															{values.data.map((content, index) => (
+																<div key={index}>
+																	<LinkDragger
+																		content={content}
+																		values={values.data[index]}
+																		dropdownName={`data[${index}].platform`}
+																		inputName={`data.${index}.link`}
+																		key={`Link#_${index}`}
+																		linkId={index}
+																		onDelete={remove}
+																		handleInputChange={(
+																			e: React.ChangeEvent<HTMLInputElement>
+																		) => {
+																			handleChange(e);
+																			const updatedData: Link[] =
+																				values.data.map((_, itemIndex) => ({
+																					platform:
+																						values.data[itemIndex].platform,
+																					link:
+																						itemIndex === index
+																							? e.target.value
+																							: values.data[itemIndex].link,
+																				}));
+																			setLinkContext((prevState) => ({
+																				...prevState,
+																				data: updatedData,
+																			}));
+																		}}
+																	/>
+																</div>
+															))}
+														</Scrollable>
+														<Box display="flex" justifyContent="end">
+															<Button
+																type="submit"
+																variant="contained"
+																color="primary"
+																size="large"
+																disabled={false}
+															>
+																Save
+															</Button>
+														</Box>
 													</Box>
 												</Box>
-											</Box>
-										) : (
-											<Default
-												Image={DefaultImage}
-												title="Let’s get you started"
-												subtitle="Use the “Add new link” button to get started. Once you have more than one link, you can reorder and edit them. We’re here to help you share your profiles with everyone!"
-											/>
-										)}
-									</Stack>
-								)}
-							</FieldArray>
-						</Form>
-					)}
+											) : (
+												<Default
+													Image={DefaultImage}
+													title="Let’s get you started"
+													subtitle="Use the “Add new link” button to get started. Once you have more than one link, you can reorder and edit them. We’re here to help you share your profiles with everyone!"
+												/>
+											)}
+										</Stack>
+									)}
+								</FieldArray>
+							</Form>
+						);
+					}}
 				</Formik>
 			</Box>
 		</Application>
