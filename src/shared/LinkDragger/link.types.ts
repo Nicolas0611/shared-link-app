@@ -1,12 +1,7 @@
-export interface Link {
-	link: string;
-	platform: string;
-}
-
 export interface LinkDraggerProps {
 	content: Link;
 	linkId: number;
-	onDelete<T>(index: number): T | undefined;
+	onDelete: () => void;
 	dropdownName: string;
 	inputName: string;
 	values: Link;

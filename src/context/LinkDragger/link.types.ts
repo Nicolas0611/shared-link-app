@@ -1,5 +1,3 @@
-import { Link } from '../../shared/LinkDragger/link.types';
-
 export interface LinkProps {
 	data: Link[];
 }

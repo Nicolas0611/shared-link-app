@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Stack, Typography, Box, Button } from '@mui/material';
 import { Formik, Form, FieldArray } from 'formik';
 
@@ -8,22 +8,23 @@ import { Scrollable } from '../../shared/Scrollable/scrollable.styled';
 import DefaultImage from '../../assets/DefaultImage';
 import Default from '../../shared/Default/default';
 import { LinkDraggerContext } from '../../context/LinkDragger/link.context';
-import { addCustomLinks } from '../../network/firebaseActions/firebaseUserActions';
-import { Link } from '../../shared/LinkDragger/link.types';
+import {
+	addCustomLinks,
+	getCustomLinks,
+} from '../../network/firebaseActions/firebaseUserActions';
+import { initialValues } from './home.types';
 
 function Home() {
 	//todo: CHECK IF THE USER HAVE LINKS, IF IT HAVE LINKS UPDATE THEM.
 	//TODO: TRY TO UPDATE LINKS WITH AN USEFFECT APPROACH
-	//TODO: HANDLE REMOVE
 	const { setLinkContext } = useContext(LinkDraggerContext);
 
-	type InitialValues = {
-		data: Array<{ link: string; platform: string }>;
-	};
-
-	const initialValues: InitialValues = {
-		data: [], // Start with an empty array
-	};
+	/* 	useEffect(() => {
+		const getLinks = async () => {
+			await getCustomLinks();
+		};
+		getLinks();
+	}, []); */
 
 	return (
 		<Application>
@@ -47,6 +48,7 @@ function Home() {
 					initialValues={initialValues}
 					onSubmit={async (values) => {
 						await addCustomLinks(values);
+						//TODO:EMPTY THE STATE
 					}}
 				>
 					{({ values, handleChange }) => {
@@ -58,7 +60,7 @@ function Home() {
 										push,
 									}: {
 										remove<T>(index: number): T | undefined;
-										push: (obj: { link: string; platform: string }) => void;
+										push: (obj: Link) => void;
 									}) => (
 										<Stack height={'100%'}>
 											<Box sx={{ paddingBottom: '2rem' }}>
@@ -102,23 +104,32 @@ function Home() {
 																		inputName={`data.${index}.link`}
 																		key={`Link#_${index}`}
 																		linkId={index}
-																		onDelete={remove}
+																		onDelete={() => {
+																			remove(index);
+																			setLinkContext((prevState) => ({
+																				...prevState,
+																				data: prevState.data.filter(
+																					(_, LinkIndex) => index !== LinkIndex
+																				),
+																			}));
+																		}}
 																		handleInputChange={(
 																			e: React.ChangeEvent<HTMLInputElement>
 																		) => {
 																			handleChange(e);
-																			const updatedData: Link[] =
-																				values.data.map((_, itemIndex) => ({
-																					platform:
-																						values.data[itemIndex].platform,
-																					link:
-																						itemIndex === index
-																							? e.target.value
-																							: values.data[itemIndex].link,
-																				}));
+
 																			setLinkContext((prevState) => ({
 																				...prevState,
-																				data: updatedData,
+																				data: values.data.map(
+																					(_, itemIndex) => ({
+																						platform:
+																							values.data[itemIndex].platform,
+																						link:
+																							itemIndex === index
+																								? e.target.value
+																								: values.data[itemIndex].link,
+																					})
+																				),
 																			}));
 																		}}
 																	/>

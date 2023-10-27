@@ -30,12 +30,7 @@ function LinkDragger({
 				<Typography variant="body1" color={'text.disabled'}>
 					{`Link#${linkId}`}
 				</Typography>
-				<Button
-					onClick={() => {
-						onDelete(linkId);
-					}}
-					variant="text"
-				>
+				<Button onClick={onDelete} variant="text">
 					Remove
 				</Button>
 			</Stack>

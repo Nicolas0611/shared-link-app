@@ -44,6 +44,7 @@ function Phone() {
 								type="tabs"
 								key={`${link.link}_${linkIndex}`}
 								name={link.platform}
+								link={link.link}
 							/>
 						))}
 					</Stack>
