@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useLayoutEffect } from 'react';
 import { Stack, Typography, Box, Button } from '@mui/material';
 import { Formik, Form, FieldArray } from 'formik';
 
@@ -13,18 +13,20 @@ import {
 	getCustomLinks,
 } from '../../network/firebaseActions/firebaseUserActions';
 import { initialValues } from './home.types';
+import { useConfirmation } from '../../hooks/useConfirmation';
 
 function Home() {
 	//todo: CHECK IF THE USER HAVE LINKS, IF IT HAVE LINKS UPDATE THEM.
 	//TODO: TRY TO UPDATE LINKS WITH AN USEFFECT APPROACH
 	const { setLinkContext } = useContext(LinkDraggerContext);
+	const { handleOnError, handleOnSuccess } = useConfirmation();
 
-	/* 	useEffect(() => {
+	useLayoutEffect(() => {
 		const getLinks = async () => {
-			await getCustomLinks();
+			await getCustomLinks(handleOnError);
 		};
 		getLinks();
-	}, []); */
+	}, []);
 
 	return (
 		<Application>
@@ -47,8 +49,7 @@ function Home() {
 				<Formik
 					initialValues={initialValues}
 					onSubmit={async (values) => {
-						await addCustomLinks(values);
-						//TODO:EMPTY THE STATE
+						await addCustomLinks(values, handleOnSuccess, handleOnError);
 					}}
 				>
 					{({ values, handleChange }) => {
@@ -117,7 +118,6 @@ function Home() {
 																			e: React.ChangeEvent<HTMLInputElement>
 																		) => {
 																			handleChange(e);
-
 																			setLinkContext((prevState) => ({
 																				...prevState,
 																				data: values.data.map(

@@ -7,13 +7,12 @@ export const useConfirmation = () => {
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 
-	const handleOnSuccess = ({ route, message }: HandleOnSuccessProps) => {
+	const handleOnSuccess = (route: string) => {
 		if (route) navigate(route);
-		enqueueSnackbar(message, { variant: 'success' });
 		setLoading(false);
 	};
 
-	const handleOnError = ({ message }: HandleOnError) => {
+	const handleOnError = (message: string) => {
 		enqueueSnackbar(message, {
 			variant: 'error',
 		});
@@ -22,7 +21,6 @@ export const useConfirmation = () => {
 
 	return {
 		loading,
-		setLoading,
 		handleOnSuccess,
 		handleOnError,
 	};

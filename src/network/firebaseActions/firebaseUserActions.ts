@@ -1,46 +1,58 @@
+import { LinkProps } from '../../context/LinkDragger/link.types';
 import { auth, db } from '../../libs/firebase/firebase.config';
-import {
-	addDoc,
-	collection,
-	doc,
-	getDoc,
-	getDocs,
-	limit,
-	orderBy,
-	query,
-} from 'firebase/firestore';
+import { addDoc, collection, getDocs, query } from 'firebase/firestore';
 
-export const addCustomLinks = async (data) => {
-	//TODO REFACTOR FUNCTION AND ADD SECURITY RULES
-	try {
-		const user = auth.currentUser;
-		const uid = user.uid;
-		// Create a CollectionReference for the user's collection of links
-		const userLinksCollectionRef = collection(db, `users/${uid}/links`);
-
-		// Add a new document to the user's collection of links
-		await addDoc(userLinksCollectionRef, data);
-		console.log('Datan sent successfully');
-	} catch (error) {
-		console.error('Error sending data to Firestore:', error);
+export const addCustomLinks = async (
+	data: LinkProps,
+	handleOnSuccess: ({ route, message }: HandleOnSuccessProps) => void,
+	handleOnError: ({ message }: HandleOnError) => void
+) => {
+	if (auth.currentUser) {
+		try {
+			const uid = auth.currentUser.uid;
+			const userLinksCollectionRef = collection(db, `users/${uid}/links`);
+			await addDoc(userLinksCollectionRef, data);
+			handleOnSuccess({
+				message: 'Links añadidos exitosamente',
+			});
+		} catch (error) {
+			handleOnError({
+				message: error as string,
+			});
+		}
+	} else {
+		handleOnError({
+			message: 'Usuario no encontrado',
+		});
 	}
 };
-export const getCustomLinks = async () => {
-	const user = auth.currentUser;
-	const uid = user.uid;
-	// Pass the Firestore database instance as a parameter
 
-	try {
-		const q = query(collection(db, `users/${uid}/links`));
-		const querySnapshot = await getDocs(q);
-		if (querySnapshot.empty) {
-			console.log('No documents found');
-			return;
+export const getCustomLinks = async (
+	handleOnError: ({ message }: HandleOnError) => void
+) => {
+	if (auth.currentUser) {
+		try {
+			const uid = auth.currentUser.uid;
+			const q = query(collection(db, `users/${uid}/links`));
+			const querySnapshot = await getDocs(q);
+			if (querySnapshot.empty) {
+				handleOnError({
+					message: 'Usuario no encontrado',
+				});
+				return;
+			}
+			const jobList = [];
+			querySnapshot.forEach((doc) => {
+				jobList.push({ ...doc.data() });
+			});
+		} catch (error) {
+			handleOnError({
+				message: error as string,
+			});
 		}
-		const lastDocument = querySnapshot.docs[0];
-		console.log('Last Document ID:', lastDocument.id);
-		console.log('Last Document Data:', lastDocument.data());
-	} catch (error) {
-		console.error('Error getting documents:', error);
+	} else {
+		handleOnError({
+			message: 'Usuario no encontrado',
+		});
 	}
 };

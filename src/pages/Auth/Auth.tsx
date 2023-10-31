@@ -6,7 +6,7 @@ import {
 	TextFieldProps,
 } from '@mui/material';
 import { Formik, Form } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import AuthLayout from '../../layout/Auth/auth.layout';
@@ -45,13 +45,14 @@ function Auth() {
 		}
 	}, [hash]);
 
-	const InitialValues = (hashValue: ActiveTabProps) => {
+	const InitialValues = () => {
 		const initialFormValues = {
 			login: initialLoginInputData,
 			signup: initialRegisterInputData,
 		};
-		return initialFormValues[hashValue];
+		return initialFormValues[activeTab];
 	};
+	const getInitialValues = useMemo(() => InitialValues(), [activeTab]);
 
 	return (
 		<>
@@ -72,7 +73,7 @@ function Auth() {
 				>
 					<Formik
 						enableReinitialize={true}
-						initialValues={InitialValues(activeTab)}
+						initialValues={getInitialValues}
 						validate={(values) => {
 							const errors: Partial<InitialValues> = {};
 							if (values.confirm_password) {

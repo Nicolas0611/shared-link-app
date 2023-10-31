@@ -1,8 +1,8 @@
 type AuthType = 'signup' | 'login';
 
 export interface BaseAuthProps {
-	onSuccess?: (route: string) => void;
-	onError?: (message: string) => void;
+	onSuccess?: ({ route, message }: HandleOnSuccessProps) => void;
+	onError?: ({ message }: HandleOnError) => void;
 }
 export interface FirebaseAuthProps extends BaseAuthProps {
 	authType: AuthType;

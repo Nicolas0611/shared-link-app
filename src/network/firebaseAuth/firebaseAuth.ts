@@ -20,19 +20,19 @@ export const firebaseAuth = ({
 	};
 	authFunction[authType](auth, email, password)
 		.then(() => {
-			onSuccess?.(PATHS.ROOT);
+			onSuccess?.({ route: PATHS.ROOT, message: 'Autenticación exitosa' });
 		})
 		.catch((error: string) => {
-			onError?.(error);
+			onError?.({ message: error });
 		});
 };
 
 export const fireBaseLogOut = ({ onSuccess, onError }: BaseAuthProps) => {
 	signOut(auth)
 		.then(() => {
-			onSuccess?.(PATHS.AUTH);
+			onSuccess?.({ route: PATHS.AUTH, message: 'Vuelva Pronto!' });
 		})
 		.catch((error: string) => {
-			onError?.(error);
+			onError?.({ message: error });
 		});
 };
