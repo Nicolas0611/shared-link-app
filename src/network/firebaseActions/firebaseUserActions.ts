@@ -37,7 +37,7 @@ export const getCustomLinks = async (
 			const querySnapshot = await getDocs(q);
 			if (querySnapshot.empty) {
 				handleOnError({
-					message: 'Usuario no encontrado',
+					message: 'No se encontro datos',
 				});
 				return;
 			}

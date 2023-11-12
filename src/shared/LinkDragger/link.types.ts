@@ -1,5 +1,5 @@
 export interface LinkDraggerProps {
-	content: Link;
+	content?: Link;
 	linkId: number;
 	onDelete: () => void;
 	dropdownName: string;

@@ -1,4 +1,4 @@
-import { useContext, useLayoutEffect } from 'react';
+import { useContext, useEffect, useLayoutEffect } from 'react';
 import { Stack, Typography, Box, Button } from '@mui/material';
 import { Formik, Form, FieldArray } from 'formik';
 
@@ -14,12 +14,21 @@ import {
 } from '../../network/firebaseActions/firebaseUserActions';
 import { initialValues } from './home.types';
 import { useConfirmation } from '../../hooks/useConfirmation';
+import { LinkProps } from '../../context/LinkDragger/link.types';
 
 function Home() {
 	//todo: CHECK IF THE USER HAVE LINKS, IF IT HAVE LINKS UPDATE THEM.
 	//TODO: TRY TO UPDATE LINKS WITH AN USEFFECT APPROACH
 	const { setLinkContext } = useContext(LinkDraggerContext);
+	//TODO: ADD HANDLE ON SUCCESS
 	const { handleOnError, handleOnSuccess } = useConfirmation();
+
+	const GetValues = (values: LinkProps) => {
+		useEffect(() => {
+			setLinkContext(values);
+		}, [values]);
+		return null;
+	};
 
 	useLayoutEffect(() => {
 		const getLinks = async () => {
@@ -48,13 +57,16 @@ function Home() {
 
 				<Formik
 					initialValues={initialValues}
-					onSubmit={async (values) => {
-						await addCustomLinks(values, handleOnSuccess, handleOnError);
+					onSubmit={(values) => {
+						console.log(values);
+						/* 						await addCustomLinks(values, handleOnSuccess, handleOnError);
+						 */
 					}}
 				>
 					{({ values, handleChange }) => {
 						return (
 							<Form style={{ marginTop: '0', height: '100%' }}>
+								{GetValues(values)}
 								<FieldArray name="data">
 									{({
 										remove,
@@ -118,19 +130,6 @@ function Home() {
 																			e: React.ChangeEvent<HTMLInputElement>
 																		) => {
 																			handleChange(e);
-																			setLinkContext((prevState) => ({
-																				...prevState,
-																				data: values.data.map(
-																					(_, itemIndex) => ({
-																						platform:
-																							values.data[itemIndex].platform,
-																						link:
-																							itemIndex === index
-																								? e.target.value
-																								: values.data[itemIndex].link,
-																					})
-																				),
-																			}));
 																		}}
 																	/>
 																</div>
