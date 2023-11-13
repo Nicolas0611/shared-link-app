@@ -1,5 +1,11 @@
+import Application from '../../layout/Application/application.layout';
+
 function Profile() {
-	return <h1>Profile</h1>;
+	return (
+		<Application>
+			<h1>This is application</h1>
+		</Application>
+	);
 }
 
 export default Profile;

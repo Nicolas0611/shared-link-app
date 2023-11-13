@@ -1,19 +1,13 @@
 import { Stack } from '@mui/material';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 
 import Skeleton from '../shared/Skeleton/skeleton';
 import { LinkDraggerContext } from '../context/LinkDragger/link.context';
 
 function Phone() {
-	/* 	const [tabs, setTabs] = useState({});
-	 */
 	const { linkContext } = useContext(LinkDraggerContext);
 
 	//TODO: Add children props so the tabs can render in the phone wrapper
-
-	useEffect(() => {
-		console.log(linkContext);
-	}, [linkContext]);
 
 	return (
 		<>

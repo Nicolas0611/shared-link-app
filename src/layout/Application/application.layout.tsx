@@ -1,8 +1,8 @@
 import { Stack } from '@mui/material';
 
 import Container from '../../shared/Container/container.styled';
-import PhoneWrapper from '../../shared/Phone/phone.wrapper';
 import { ApplicationProps } from './application.types';
+import Phone from '../../assets/Phone';
 
 function Application({ children }: ApplicationProps) {
 	return (
@@ -15,7 +15,7 @@ function Application({ children }: ApplicationProps) {
 					justifyContent: 'center',
 				}}
 			>
-				<PhoneWrapper />
+				<Phone />
 			</Container>
 			<Container sx={{ flex: '2', padding: '2.5rem' }}>{children}</Container>
 		</Stack>

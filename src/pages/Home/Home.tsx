@@ -20,8 +20,8 @@ function Home() {
 	//todo: CHECK IF THE USER HAVE LINKS, IF IT HAVE LINKS UPDATE THEM.
 	//TODO: TRY TO UPDATE LINKS WITH AN USEFFECT APPROACH
 	const { setLinkContext } = useContext(LinkDraggerContext);
-	//TODO: ADD HANDLE ON SUCCESS
-	const { handleOnError, handleOnSuccess } = useConfirmation();
+	const { handleOnError, handleOnSuccess, setLoading, loading } =
+		useConfirmation();
 
 	const GetValues = (values: LinkProps) => {
 		useEffect(() => {
@@ -34,7 +34,7 @@ function Home() {
 		const getLinks = async () => {
 			await getCustomLinks(handleOnError);
 		};
-		getLinks();
+		void getLinks();
 	}, []);
 
 	return (
@@ -57,10 +57,9 @@ function Home() {
 
 				<Formik
 					initialValues={initialValues}
-					onSubmit={(values) => {
-						console.log(values);
-						/* 						await addCustomLinks(values, handleOnSuccess, handleOnError);
-						 */
+					onSubmit={async (values) => {
+						setLoading(true);
+						await addCustomLinks(values, handleOnSuccess, handleOnError);
 					}}
 				>
 					{({ values, handleChange }) => {
@@ -126,11 +125,7 @@ function Home() {
 																				),
 																			}));
 																		}}
-																		handleInputChange={(
-																			e: React.ChangeEvent<HTMLInputElement>
-																		) => {
-																			handleChange(e);
-																		}}
+																		handleInputChange={handleChange}
 																	/>
 																</div>
 															))}
@@ -141,7 +136,7 @@ function Home() {
 																variant="contained"
 																color="primary"
 																size="large"
-																disabled={false}
+																disabled={loading}
 															>
 																Save
 															</Button>

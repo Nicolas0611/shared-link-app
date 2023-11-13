@@ -45,6 +45,7 @@ export const getCustomLinks = async (
 			querySnapshot.forEach((doc) => {
 				jobList.push({ ...doc.data() });
 			});
+			console.log(jobList);
 		} catch (error) {
 			handleOnError({
 				message: error as string,
