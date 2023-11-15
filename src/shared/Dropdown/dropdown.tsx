@@ -1,13 +1,13 @@
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { DropdownItems, DropdownProps } from './dropdown.types';
+import { DropdownItemsTypes, DropdownProps } from './dropdown.types';
 
 function Dropdown({
-	handleChange,
+	onChange,
 	label,
 	value,
 	dropdownItems,
 	name = '',
-	isRequired = false,
+	required = false,
 	defaultValue,
 }: DropdownProps) {
 	return (
@@ -20,10 +20,10 @@ function Dropdown({
 				defaultValue={defaultValue}
 				value={value || ''}
 				label={label}
-				onChange={handleChange}
-				required={isRequired}
+				onChange={onChange}
+				required={required}
 			>
-				{dropdownItems.map((item: DropdownItems) => (
+				{dropdownItems.map((item: DropdownItemsTypes) => (
 					<MenuItem key={item.label} value={item.value}>
 						{item.label}
 					</MenuItem>

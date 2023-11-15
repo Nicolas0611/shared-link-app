@@ -20,6 +20,7 @@ import {
 
 import { firebaseAuth } from '../../network/firebaseAuth/firebaseAuth';
 import { useConfirmation } from '../../hooks/useConfirmation';
+import Loader from '../../shared/Loader/loader';
 
 interface InitialValues {
 	email: string;
@@ -32,7 +33,8 @@ function Auth() {
 	const navigate = useNavigate();
 	const { hash } = useLocation();
 	const [activeTab, setActiveTab] = useState<ActiveTabProps>('login');
-	const { handleOnError, handleOnSuccess } = useConfirmation();
+	const { handleOnError, handleOnSuccess, setLoading, loading } =
+		useConfirmation();
 
 	useEffect(() => {
 		if (!hash) {
@@ -54,6 +56,7 @@ function Auth() {
 	};
 	const getInitialValues = useMemo(() => InitialValues(), [activeTab]);
 
+	if (loading) return <Loader />;
 	return (
 		<>
 			<Container
@@ -85,6 +88,7 @@ function Auth() {
 						}}
 						onSubmit={(values, { setSubmitting }) => {
 							const { email, password } = values;
+							setLoading(true);
 							firebaseAuth({
 								authType: activeTab,
 								values: { email, password },

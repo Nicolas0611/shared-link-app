@@ -1,15 +1,9 @@
-import { SelectChangeEvent } from '@mui/material/Select';
+import { SelectProps } from '@mui/material/Select';
 
-export type DropdownItems = {
+export type DropdownItemsTypes = {
 	value: string | number;
 	label: string;
 };
-export interface DropdownProps {
-	handleChange: (event: SelectChangeEvent) => void;
-	label: string;
-	value?: string | undefined;
-	isRequired?: boolean;
-	name: string;
-	dropdownItems: DropdownItems[];
-	defaultValue: string | undefined;
+export interface DropdownProps extends SelectProps {
+	dropdownItems: DropdownItemsTypes[];
 }

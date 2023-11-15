@@ -1,9 +1,11 @@
-import { Stack, Typography, Button, TextField } from '@mui/material';
+import { Stack, Typography, Button } from '@mui/material';
 
 import { LinkDraggerProps } from './link.types';
-import Dropdown from '../Dropdown/dropdown';
+import { useEffect } from 'react';
+import InputHandler from '../InputHandler/input.handler';
 
 function LinkDragger({
+	content,
 	linkId,
 	onDelete,
 	dropdownName,
@@ -17,6 +19,32 @@ function LinkDragger({
 		{ label: 'LinkedIn', value: 'linkedin' },
 		{ label: 'Youtube', value: 'youtube' },
 		{ label: 'Facebook', value: 'facebook' },
+	];
+
+	useEffect(() => {
+		console.log(content);
+	}, [content]);
+
+	const dataInputs = [
+		{
+			type: 'dropdown',
+			dropdownItems: dropDownItems,
+			name: dropdownName,
+			defaultValue: '',
+			value: values.platform,
+			required: true,
+			label: 'Choose a platform',
+			onChange: handleInputChange,
+		},
+		{
+			type: 'text',
+			name: inputName,
+			value: values.link,
+			required: true,
+			label: 'Attach your link',
+			variant: 'outlined',
+			onChange: handleInputChange,
+		},
 	];
 
 	return (
@@ -34,26 +62,9 @@ function LinkDragger({
 					Remove
 				</Button>
 			</Stack>
-
-			<Dropdown
-				dropdownItems={dropDownItems}
-				name={dropdownName}
-				defaultValue={''}
-				value={values.platform}
-				isRequired={true}
-				label={'Choose a platform'}
-				handleChange={handleInputChange}
-			/>
-
-			<TextField
-				required={true}
-				name={inputName}
-				type="text"
-				value={values.link}
-				label="Attach your link"
-				variant="outlined"
-				onChange={handleInputChange}
-			/>
+			{dataInputs.map((input, index) => (
+				<InputHandler key={`input_${index}`} {...input} />
+			))}
 		</Stack>
 	);
 }

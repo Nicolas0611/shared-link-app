@@ -1,5 +1,5 @@
 import { useContext, useEffect, useLayoutEffect } from 'react';
-import { Stack, Typography, Box, Button } from '@mui/material';
+import { Stack, Box, Button } from '@mui/material';
 import { Formik, Form, FieldArray } from 'formik';
 
 import Application from '../../layout/Application/application.layout';
@@ -38,126 +38,112 @@ function Home() {
 	}, []);
 
 	return (
-		<Application>
-			<Box
-				height={'100%'}
-				display={'flex'}
-				flexDirection={'column'}
-				gap={{ lg: '1.2rem', xl: '2.2rem' }}
+		<Application
+			title="Customize your links"
+			subtitle="Add/edit/remove links below and then share all your profiles with the world!"
+		>
+			<Formik
+				initialValues={initialValues}
+				onSubmit={async (values) => {
+					setLoading(true);
+					await addCustomLinks(values, handleOnSuccess, handleOnError);
+				}}
 			>
-				<Box>
-					<Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-						Customize your links
-					</Typography>
-					<Typography variant="body1" color={'text.disabled'}>
-						Add/edit/remove links below and then share all your profiles with
-						the world!
-					</Typography>
-				</Box>
-
-				<Formik
-					initialValues={initialValues}
-					onSubmit={async (values) => {
-						setLoading(true);
-						await addCustomLinks(values, handleOnSuccess, handleOnError);
-					}}
-				>
-					{({ values, handleChange }) => {
-						return (
-							<Form style={{ marginTop: '0', height: '100%' }}>
-								{GetValues(values)}
-								<FieldArray name="data">
-									{({
-										remove,
-										push,
-									}: {
-										remove<T>(index: number): T | undefined;
-										push: (obj: Link) => void;
-									}) => (
-										<Stack height={'100%'}>
-											<Box sx={{ paddingBottom: '2rem' }}>
-												<Button
-													fullWidth
-													onClick={() => {
-														if (values.data.length < 5) {
-															push({ link: '', platform: '' });
-														}
+				{({ values, handleChange }) => {
+					return (
+						<Form style={{ marginTop: '0', height: '100%' }}>
+							{GetValues(values)}
+							<FieldArray name="data">
+								{({
+									remove,
+									push,
+								}: {
+									remove<T>(index: number): T | undefined;
+									push: (obj: Link) => void;
+								}) => (
+									<Stack height={'100%'}>
+										<Box sx={{ paddingBottom: '2rem' }}>
+											<Button
+												fullWidth
+												onClick={() => {
+													if (values.data.length < 5) {
+														push({ link: '', platform: '' });
+													}
+												}}
+												variant="outlined"
+												color="primary"
+												size="large"
+											>
+												Add new link
+											</Button>
+										</Box>
+										{values.data.length !== 0 ? (
+											<Box sx={{ height: '100%' }}>
+												<Box
+													display="flex"
+													flexDirection="column"
+													gap={2}
+													sx={{
+														maxHeight: {
+															xs: '10rem',
+															sm: '20rem',
+															md: 400,
+															lg: 440,
+															xl: 'calc(75%)',
+														},
 													}}
-													variant="outlined"
-													color="primary"
-													size="large"
 												>
-													Add new link
-												</Button>
-											</Box>
-											{values.data.length !== 0 ? (
-												<Box sx={{ height: '100%' }}>
-													<Box
-														display="flex"
-														flexDirection="column"
-														gap={2}
-														sx={{
-															maxHeight: {
-																xs: '10rem',
-																sm: '20rem',
-																md: 400,
-																lg: 440,
-																xl: 'calc(75%)',
-															},
-														}}
-													>
-														<Scrollable maxHeight={'inherit'} gap={2}>
-															{values.data.map((content, index) => (
-																<div key={index}>
-																	<LinkDragger
-																		content={content}
-																		values={values.data[index]}
-																		dropdownName={`data[${index}].platform`}
-																		inputName={`data.${index}.link`}
-																		key={`Link#_${index}`}
-																		linkId={index}
-																		onDelete={() => {
-																			remove(index);
-																			setLinkContext((prevState) => ({
-																				...prevState,
-																				data: prevState.data.filter(
-																					(_, LinkIndex) => index !== LinkIndex
-																				),
-																			}));
-																		}}
-																		handleInputChange={handleChange}
-																	/>
-																</div>
-															))}
-														</Scrollable>
-														<Box display="flex" justifyContent="end">
-															<Button
-																type="submit"
-																variant="contained"
-																color="primary"
-																size="large"
-																disabled={loading}
-															>
-																Save
-															</Button>
-														</Box>
+													<Scrollable maxHeight={'inherit'} gap={2}>
+														{values.data.map((content, index) => (
+															<div key={index}>
+																<LinkDragger
+																	content={content}
+																	values={values.data[index]}
+																	dropdownName={`data[${index}].platform`}
+																	inputName={`data.${index}.link`}
+																	key={`Link#_${index}`}
+																	linkId={index}
+																	onDelete={() => {
+																		remove(index);
+																		setLinkContext((prevState) => ({
+																			...prevState,
+																			data: prevState.data.filter(
+																				(_, LinkIndex) => index !== LinkIndex
+																			),
+																		}));
+																	}}
+																	handleInputChange={handleChange}
+																/>
+															</div>
+														))}
+													</Scrollable>
+													<Box display="flex" justifyContent="end">
+														<Button
+															type="submit"
+															variant="contained"
+															color="primary"
+															size="large"
+															disabled={loading}
+														>
+															Save
+														</Button>
 													</Box>
 												</Box>
-											) : (
-												<Default
-													Image={DefaultImage}
-													title="Let’s get you started"
-													subtitle="Use the “Add new link” button to get started. Once you have more than one link, you can reorder and edit them. We’re here to help you share your profiles with everyone!"
-												/>
-											)}
-										</Stack>
-									)}
-								</FieldArray>
-							</Form>
-						);
-					}}
-				</Formik>
-			</Box>
+											</Box>
+										) : (
+											<Default
+												Image={DefaultImage}
+												title="Let’s get you started"
+												subtitle="Use the “Add new link” button to get started. Once you have more than one link, you can reorder and edit them. We’re here to help you share your profiles with everyone!"
+											/>
+										)}
+									</Stack>
+								)}
+							</FieldArray>
+						</Form>
+					);
+				}}
+			</Formik>
 		</Application>
 	);
 }

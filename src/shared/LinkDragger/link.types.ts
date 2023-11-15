@@ -4,6 +4,7 @@ export interface LinkDraggerProps {
 	onDelete: () => void;
 	dropdownName: string;
 	inputName: string;
+	name?: string;
 	values: Link;
 	handleInputChange: {
 		(e: React.ChangeEvent<any>): void;
