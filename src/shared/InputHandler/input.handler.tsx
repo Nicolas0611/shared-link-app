@@ -3,10 +3,10 @@ import { TextField } from '@mui/material';
 
 import { InputHandlerProps } from './input.handler.types';
 
-const InputHandler = ({ type, dropdownItems, ...props }: InputHandlerProps) => {
+const InputHandler = ({ type, options, ...props }: InputHandlerProps) => {
 	switch (type) {
 		case 'dropdown':
-			return <Dropdown dropdownItems={dropdownItems!} {...props} />;
+			return <Dropdown options={options!} {...props} />;
 		case 'text':
 			return <TextField {...props} />;
 		default:

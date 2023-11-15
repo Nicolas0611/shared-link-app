@@ -5,5 +5,5 @@ export type DropdownItemsTypes = {
 	label: string;
 };
 export interface DropdownProps extends SelectProps {
-	dropdownItems: DropdownItemsTypes[];
+	options: DropdownItemsTypes[];
 }

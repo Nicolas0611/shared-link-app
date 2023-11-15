@@ -13,7 +13,7 @@ function LinkDragger({
 	values,
 	handleInputChange,
 }: LinkDraggerProps) {
-	const dropDownItems = [
+	const options = [
 		{ label: 'Github', value: 'github' },
 		{ label: 'Twitter', value: 'twitter' },
 		{ label: 'LinkedIn', value: 'linkedin' },
@@ -28,7 +28,7 @@ function LinkDragger({
 	const dataInputs = [
 		{
 			type: 'dropdown',
-			dropdownItems: dropDownItems,
+			options,
 			name: dropdownName,
 			defaultValue: '',
 			value: values.platform,

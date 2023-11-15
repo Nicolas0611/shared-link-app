@@ -5,7 +5,7 @@ function Dropdown({
 	onChange,
 	label,
 	value,
-	dropdownItems,
+	options,
 	name = '',
 	required = false,
 	defaultValue,
@@ -23,7 +23,7 @@ function Dropdown({
 				onChange={onChange}
 				required={required}
 			>
-				{dropdownItems.map((item: DropdownItemsTypes) => (
+				{options.map((item: DropdownItemsTypes) => (
 					<MenuItem key={item.label} value={item.value}>
 						{item.label}
 					</MenuItem>

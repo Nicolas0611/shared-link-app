@@ -18,7 +18,6 @@ import { LinkProps } from '../../context/LinkDragger/link.types';
 
 function Home() {
 	//todo: CHECK IF THE USER HAVE LINKS, IF IT HAVE LINKS UPDATE THEM.
-	//TODO: TRY TO UPDATE LINKS WITH AN USEFFECT APPROACH
 	const { setLinkContext } = useContext(LinkDraggerContext);
 	const { handleOnError, handleOnSuccess, setLoading, loading } =
 		useConfirmation();

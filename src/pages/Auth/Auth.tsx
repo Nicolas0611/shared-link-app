@@ -27,7 +27,7 @@ interface InitialValues {
 	password: string;
 	confirm_password?: string;
 }
-
+//TODO: ADD YUP VALIDATION
 function Auth() {
 	type ActiveTabProps = 'login' | 'signup';
 	const navigate = useNavigate();

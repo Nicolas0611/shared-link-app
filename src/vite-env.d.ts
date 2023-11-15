@@ -7,6 +7,7 @@ interface Link {
 	link: string;
 	platform: string;
 }
+
 interface HandleOnSuccessProps {
 	route?: string;
 	message: string;
