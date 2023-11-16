@@ -15,6 +15,7 @@ import {
 import { initialValues } from './home.types';
 import { useConfirmation } from '../../hooks/useConfirmation';
 import { LinkProps } from '../../context/LinkDragger/link.types';
+import { dataHomeInputs } from './constants';
 
 function Home() {
 	//todo: CHECK IF THE USER HAVE LINKS, IF IT HAVE LINKS UPDATE THEM.
@@ -93,28 +94,32 @@ function Home() {
 													}}
 												>
 													<Scrollable maxHeight={'inherit'} gap={2}>
-														{values.data.map((content, index) => (
-															<div key={index}>
-																<LinkDragger
-																	content={content}
-																	values={values.data[index]}
-																	dropdownName={`data[${index}].platform`}
-																	inputName={`data.${index}.link`}
-																	key={`Link#_${index}`}
-																	linkId={index}
-																	onDelete={() => {
-																		remove(index);
-																		setLinkContext((prevState) => ({
-																			...prevState,
-																			data: prevState.data.filter(
-																				(_, LinkIndex) => index !== LinkIndex
-																			),
-																		}));
-																	}}
-																	handleInputChange={handleChange}
-																/>
-															</div>
-														))}
+														{values.data.map((content, index) => {
+															const linkData = dataHomeInputs({
+																index,
+																values,
+																handleChange,
+															});
+															return (
+																<div key={index}>
+																	<LinkDragger
+																		content={content}
+																		data={linkData}
+																		key={`Link#_${index}`}
+																		linkId={index}
+																		onDelete={() => {
+																			remove(index);
+																			setLinkContext((prevState) => ({
+																				...prevState,
+																				data: prevState.data.filter(
+																					(_, LinkIndex) => index !== LinkIndex
+																				),
+																			}));
+																		}}
+																	/>
+																</div>
+															);
+														})}
 													</Scrollable>
 													<Box display="flex" justifyContent="end">
 														<Button
