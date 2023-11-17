@@ -11,7 +11,7 @@ import { LinkDraggerContext } from '../../context/LinkDragger/link.context';
 import {
 	addCustomLinks,
 	getLinks,
-} from '../../network/firebaseActions/firebaseUserActions';
+} from '../../network/firebaseHome/HomeRequests';
 import { initialValues } from './home.types';
 import { useConfirmation } from '../../hooks/useConfirmation';
 import { LinkProps } from '../../context/LinkDragger/link.types';
@@ -20,7 +20,6 @@ import Loader from '../../shared/Loader/loader';
 
 function Home() {
 	//todo: CHECK IF THE USER HAVE LINKS, IF IT HAVE LINKS UPDATE THEM.
-	//TODO: REVIEW HOW TO PERFORM CUSTOM HOOK FOR FIREBASE ACTIONS
 	//todo: CHECK STATE WHEN CHANGING TAB
 	const { setLinkContext } = useContext(LinkDraggerContext);
 	const { handleOnError, handleOnSuccess, setLoading, loading } =
@@ -41,10 +40,6 @@ function Home() {
 		};
 		void getCustomLinks();
 	}, []);
-
-	useLayoutEffect(() => {
-		console.log(temporalLinks);
-	}, [temporalLinks]);
 
 	if (loading) return <Loader />;
 	return (

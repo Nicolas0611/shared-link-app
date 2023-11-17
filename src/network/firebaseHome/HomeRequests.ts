@@ -1,13 +1,10 @@
 import { FIREBASE_QUERYS } from '../../constants/firebase.api';
 import { LinkProps } from '../../context/LinkDragger/link.types';
-import { auth, db } from '../../libs/firebase/firebase.config';
+import { auth } from '../../libs/firebase/firebase.config';
 import {
-	addDoc,
-	collection,
-	getDocs,
-	orderBy,
-	query,
-} from 'firebase/firestore';
+	getHttpFirebaseFn,
+	postHttpFirebaseFn,
+} from '../../utils/firebaseRequests';
 
 export const addCustomLinks = async (
 	data: LinkProps,
@@ -17,13 +14,15 @@ export const addCustomLinks = async (
 	if (auth.currentUser) {
 		const uid = auth.currentUser.uid;
 		try {
-			const userLinksCollectionRef = collection(
-				db,
-				FIREBASE_QUERYS(uid).USER_LINKS
-			);
-			await addDoc(userLinksCollectionRef, data);
-			handleOnSuccess({
-				message: 'Links añadidos exitosamente',
+			await postHttpFirebaseFn({
+				collectionPath: FIREBASE_QUERYS(uid).USER_LINKS,
+				data,
+				handleOnSuccess: () => {
+					handleOnSuccess({
+						message: 'Links added successfully',
+					});
+				},
+				handleOnError,
 			});
 		} catch (error) {
 			handleOnError({
@@ -46,22 +45,14 @@ export const getLinks = async (
 	if (auth.currentUser) {
 		try {
 			const uid = auth.currentUser.uid;
-			const q = query(
-				collection(db, FIREBASE_QUERYS(uid).USER_LINKS),
-				orderBy('data', 'desc')
-			);
-			const querySnapshot = await getDocs(q);
-			if (querySnapshot.empty) {
-				handleOnError({
-					message: 'No se encontro datos',
-				});
-				return;
-			}
-			const jobList: LinkProps[] = [];
-			querySnapshot.forEach((doc) => {
-				jobList.push({ ...(doc.data() as LinkProps) });
+			const jobList = await getHttpFirebaseFn<LinkProps>({
+				collectionPath: FIREBASE_QUERYS(uid).USER_LINKS,
+				orderByValue: 'data',
+				handleOnSuccess,
+				handleOnError,
 			});
-			setTemporalLinks(jobList[0]);
+			const latestLink = Array.isArray(jobList) ? jobList[0] : null;
+			setTemporalLinks(latestLink!);
 			handleOnSuccess({ route: undefined, message: undefined });
 		} catch (error) {
 			handleOnError({
@@ -70,7 +61,7 @@ export const getLinks = async (
 		}
 	} else {
 		handleOnError({
-			message: 'Usuario no encontrado',
+			message: 'User not found',
 		});
 	}
 };
