@@ -1,6 +1,13 @@
+import { FIREBASE_QUERYS } from '../../constants/firebase.api';
 import { LinkProps } from '../../context/LinkDragger/link.types';
 import { auth, db } from '../../libs/firebase/firebase.config';
-import { addDoc, collection, getDocs, query } from 'firebase/firestore';
+import {
+	addDoc,
+	collection,
+	getDocs,
+	orderBy,
+	query,
+} from 'firebase/firestore';
 
 export const addCustomLinks = async (
 	data: LinkProps,
@@ -8,9 +15,12 @@ export const addCustomLinks = async (
 	handleOnError: ({ message }: HandleOnError) => void
 ) => {
 	if (auth.currentUser) {
+		const uid = auth.currentUser.uid;
 		try {
-			const uid = auth.currentUser.uid;
-			const userLinksCollectionRef = collection(db, `users/${uid}/links`);
+			const userLinksCollectionRef = collection(
+				db,
+				FIREBASE_QUERYS(uid).USER_LINKS
+			);
 			await addDoc(userLinksCollectionRef, data);
 			handleOnSuccess({
 				message: 'Links añadidos exitosamente',
@@ -27,13 +37,19 @@ export const addCustomLinks = async (
 	}
 };
 
-export const getCustomLinks = async (
-	handleOnError: ({ message }: HandleOnError) => void
+//TODO: DO CUSTOM HOOK TO CONSUME FIREBASE FUNCTIONS
+export const getLinks = async (
+	handleOnError: ({ message }: HandleOnError) => void,
+	handleOnSuccess: ({ route, message }: HandleOnSuccessProps) => void,
+	setTemporalLinks: React.Dispatch<React.SetStateAction<LinkProps>>
 ) => {
 	if (auth.currentUser) {
 		try {
 			const uid = auth.currentUser.uid;
-			const q = query(collection(db, `users/${uid}/links`));
+			const q = query(
+				collection(db, FIREBASE_QUERYS(uid).USER_LINKS),
+				orderBy('data', 'desc')
+			);
 			const querySnapshot = await getDocs(q);
 			if (querySnapshot.empty) {
 				handleOnError({
@@ -41,11 +57,12 @@ export const getCustomLinks = async (
 				});
 				return;
 			}
-			const jobList = [];
+			const jobList: LinkProps[] = [];
 			querySnapshot.forEach((doc) => {
-				jobList.push({ ...doc.data() });
+				jobList.push({ ...(doc.data() as LinkProps) });
 			});
-			console.log(jobList);
+			setTemporalLinks(jobList[0]);
+			handleOnSuccess({ route: undefined, message: undefined });
 		} catch (error) {
 			handleOnError({
 				message: error as string,

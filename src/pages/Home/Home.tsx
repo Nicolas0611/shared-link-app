@@ -1,4 +1,4 @@
-import { useContext, useEffect, useLayoutEffect } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { Stack, Box, Button } from '@mui/material';
 import { Formik, Form, FieldArray } from 'formik';
 
@@ -10,18 +10,22 @@ import Default from '../../shared/Default/default';
 import { LinkDraggerContext } from '../../context/LinkDragger/link.context';
 import {
 	addCustomLinks,
-	getCustomLinks,
+	getLinks,
 } from '../../network/firebaseActions/firebaseUserActions';
 import { initialValues } from './home.types';
 import { useConfirmation } from '../../hooks/useConfirmation';
 import { LinkProps } from '../../context/LinkDragger/link.types';
 import { dataHomeInputs } from './constants';
+import Loader from '../../shared/Loader/loader';
 
 function Home() {
 	//todo: CHECK IF THE USER HAVE LINKS, IF IT HAVE LINKS UPDATE THEM.
+	//TODO: REVIEW HOW TO PERFORM CUSTOM HOOK FOR FIREBASE ACTIONS
+	//todo: CHECK STATE WHEN CHANGING TAB
 	const { setLinkContext } = useContext(LinkDraggerContext);
 	const { handleOnError, handleOnSuccess, setLoading, loading } =
 		useConfirmation();
+	const [temporalLinks, setTemporalLinks] = useState<LinkProps>(initialValues);
 
 	const GetValues = (values: LinkProps) => {
 		useEffect(() => {
@@ -31,19 +35,25 @@ function Home() {
 	};
 
 	useLayoutEffect(() => {
-		const getLinks = async () => {
-			await getCustomLinks(handleOnError);
+		const getCustomLinks = async () => {
+			setLoading(true);
+			await getLinks(handleOnError, handleOnSuccess, setTemporalLinks);
 		};
-		void getLinks();
+		void getCustomLinks();
 	}, []);
 
+	useLayoutEffect(() => {
+		console.log(temporalLinks);
+	}, [temporalLinks]);
+
+	if (loading) return <Loader />;
 	return (
 		<Application
 			title="Customize your links"
 			subtitle="Add/edit/remove links below and then share all your profiles with the world!"
 		>
 			<Formik
-				initialValues={initialValues}
+				initialValues={temporalLinks}
 				onSubmit={async (values) => {
 					setLoading(true);
 					await addCustomLinks(values, handleOnSuccess, handleOnError);

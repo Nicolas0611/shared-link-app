@@ -9,7 +9,7 @@ export const useConfirmation = () => {
 
 	const handleOnSuccess = ({ route, message }: HandleOnSuccessProps) => {
 		if (route) navigate(route);
-		enqueueSnackbar(message, { variant: 'success' });
+		if (message) enqueueSnackbar(message, { variant: 'success' });
 		setLoading(false);
 	};
 

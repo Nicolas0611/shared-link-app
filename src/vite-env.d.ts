@@ -10,7 +10,7 @@ interface Link {
 
 interface HandleOnSuccessProps {
 	route?: string;
-	message: string;
+	message?: string;
 }
 interface HandleOnError {
 	message: string;
