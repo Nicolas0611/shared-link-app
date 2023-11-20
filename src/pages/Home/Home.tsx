@@ -24,6 +24,7 @@ function Home() {
 	//todo: CHECK STATE WHEN CHANGING TAB
 	//todo: check if for initial values is posible to set linkContext
 
+	//TODO: CHECK LATEST LINKS (Como un historial)
 	const { setLinkContext } = useContext(LinkDraggerContext);
 	const { handleOnError, handleOnSuccess, setLoading, loading } =
 		useConfirmation();
