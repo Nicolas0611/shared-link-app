@@ -19,8 +19,11 @@ import { dataHomeInputs } from './constants';
 import Loader from '../../shared/Loader/loader';
 
 function Home() {
+	//todo: think about redux-toolkit
 	//todo: CHECK IF THE USER HAVE LINKS, IF IT HAVE LINKS UPDATE THEM.
 	//todo: CHECK STATE WHEN CHANGING TAB
+	//todo: check if for initial values is posible to set linkContext
+
 	const { setLinkContext } = useContext(LinkDraggerContext);
 	const { handleOnError, handleOnSuccess, setLoading, loading } =
 		useConfirmation();

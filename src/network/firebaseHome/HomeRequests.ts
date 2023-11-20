@@ -36,7 +36,6 @@ export const addCustomLinks = async (
 	}
 };
 
-//TODO: DO CUSTOM HOOK TO CONSUME FIREBASE FUNCTIONS
 export const getLinks = async (
 	handleOnError: ({ message }: HandleOnError) => void,
 	handleOnSuccess: ({ route, message }: HandleOnSuccessProps) => void,
@@ -46,8 +45,11 @@ export const getLinks = async (
 		try {
 			const uid = auth.currentUser.uid;
 			const jobList = await getHttpFirebaseFn<LinkProps>({
-				collectionPath: FIREBASE_QUERYS(uid).USER_LINKS,
-				orderByValue: 'data',
+				params: {
+					collectionPath: FIREBASE_QUERYS(uid).USER_LINKS,
+					orderByValue: 'data',
+					sort: 'desc',
+				},
 				handleOnSuccess,
 				handleOnError,
 			});

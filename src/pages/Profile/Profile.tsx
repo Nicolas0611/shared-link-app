@@ -1,5 +1,6 @@
 import Application from '../../layout/Application/application.layout';
 
+//todo: start profile
 function Profile() {
 	return (
 		<Application

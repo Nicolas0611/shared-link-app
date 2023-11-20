@@ -13,10 +13,15 @@ type FirebasePostProps = {
 	handleOnSuccess: ({ route, message }: HandleOnSuccessProps) => void;
 	handleOnError: ({ message }: HandleOnError) => void;
 };
-type FirebaseGetProps = {
+type ParamsTypes = {
 	collectionPath: string;
-	data?: unknown;
 	orderByValue: string;
+	sort: 'asc' | 'desc';
+};
+
+type FirebaseGetProps = {
+	params: ParamsTypes;
+	data?: unknown;
 	handleOnSuccess: ({ route, message }: HandleOnSuccessProps) => void;
 	handleOnError: ({ message }: HandleOnError) => void;
 };
@@ -39,15 +44,15 @@ export const postHttpFirebaseFn = async ({
 };
 
 export const getHttpFirebaseFn = async <T>({
-	collectionPath,
-	orderByValue,
+	params,
 	handleOnSuccess,
 	handleOnError,
 }: FirebaseGetProps): Promise<T | T[] | null> => {
+	const { collectionPath, orderByValue, sort } = params;
 	try {
 		const q = query(
 			collection(db, collectionPath),
-			orderBy(orderByValue, 'desc')
+			orderBy(orderByValue, sort)
 		);
 		const querySnapshot = await getDocs(q);
 		if (querySnapshot.empty) {
