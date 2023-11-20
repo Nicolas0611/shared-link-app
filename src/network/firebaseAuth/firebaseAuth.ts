@@ -1,9 +1,10 @@
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
+	signOut,
 } from 'firebase/auth';
 import { auth } from '../../libs/firebase/firebase.config';
-import { FirebaseAuthProps } from './firebaseAuthInterfaces';
+import { BaseAuthProps, FirebaseAuthProps } from './firebase.types';
 import { PATHS } from '../../router/paths';
 
 export const firebaseAuth = ({
@@ -19,9 +20,19 @@ export const firebaseAuth = ({
 	};
 	authFunction[authType](auth, email, password)
 		.then(() => {
-			onSuccess?.(PATHS.ROOT);
+			onSuccess?.({ route: PATHS.ROOT, message: 'Autenticación exitosa' });
 		})
 		.catch((error: string) => {
-			onError?.(error);
+			onError?.({ message: error });
+		});
+};
+
+export const fireBaseLogOut = ({ onSuccess, onError }: BaseAuthProps) => {
+	signOut(auth)
+		.then(() => {
+			onSuccess?.({ route: PATHS.AUTH, message: 'Vuelva Pronto!' });
+		})
+		.catch((error: string) => {
+			onError?.({ message: error });
 		});
 };

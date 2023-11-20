@@ -1,8 +1,5 @@
-import { LayoutLabelContentProps } from '../../shared/AuthLayout/interfaces/AuthLayoutInterfaces';
-import {
-	InitialValues,
-	InputDataProps,
-} from '../../shared/AuthLayout/interfaces/InputsInterfaces';
+import { LayoutLabelContentProps } from '../../layout/Auth/auth.types';
+import { InitialValues, InputDataProps } from './auth.types';
 
 //Data
 export const initialLoginInputData: InitialValues = {

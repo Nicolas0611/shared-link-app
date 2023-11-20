@@ -9,11 +9,9 @@ import CustomTheme from './libs/mui/theme.config';
 
 // eslint-disable-next-line import/no-named-as-default-member
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	<React.StrictMode>
-		<SnackbarProvider>
-			<CustomTheme>
-				<RouterProvider router={router} />
-			</CustomTheme>
-		</SnackbarProvider>
-	</React.StrictMode>
+	<SnackbarProvider>
+		<CustomTheme>
+			<RouterProvider router={router} />
+		</CustomTheme>
+	</SnackbarProvider>
 );

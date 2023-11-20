@@ -1,6 +1,6 @@
 import { Stack, Typography, Link } from '@mui/material';
 
-import { AuthLayoutProps } from './interfaces/AuthLayoutInterfaces';
+import { AuthLayoutProps } from './auth.types';
 
 function AuthLayout({
 	children,
@@ -15,7 +15,7 @@ function AuthLayout({
 			direction="column"
 			spacing={4}
 			sx={{
-				backgroundColor: 'white',
+				backgroundColor: 'background.paper',
 				maxWidth: '40rem',
 				width: '100%',
 				padding: '3rem 3rem',

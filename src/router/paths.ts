@@ -2,6 +2,7 @@ const PATHS = {
 	HOME: '/home',
 	AUTH: '/auth',
 	ROOT: '/',
+	PROFILE_DETAILS: 'profile-details',
 	VERIFY_EMAIL: '/verify-email',
 	RESET_PASSWORD: '/reset-password',
 };

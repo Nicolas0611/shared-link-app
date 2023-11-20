@@ -1,20 +1,49 @@
-import Login from '../pages/Auth/Auth';
-import { createBrowserRouter } from 'react-router-dom';
-import { PATHS } from './paths';
+import Auth from '../pages/Auth/Auth';
+import {
+	NonIndexRouteObject,
+	createBrowserRouter,
+	redirect,
+} from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
 
-let routes = [
+import { PATHS, HASH_PATHS } from './paths';
+import { auth } from '../libs/firebase/firebase.config';
+import Authenticated from '../layout/Authenticated/authenticated.layout';
+import Home from '../pages/Home/Home';
+import Profile from '../pages/Profile/Profile';
+
+const privateRouteLoader = async () => {
+	const isUserActive = await new Promise((resolve, reject) =>
+		onAuthStateChanged(
+			auth,
+			(user) => resolve(user),
+			(e) => reject(e)
+		)
+	);
+	if (!isUserActive) return redirect(`${PATHS.AUTH}${HASH_PATHS.LOGIN}`);
+
+	return null;
+};
+
+const routes: NonIndexRouteObject[] = [
 	{
-		path: PATHS.AUTH,
-		element: <Login />,
+		path: PATHS.ROOT,
+		element: <Home />,
 	},
 	{
-		path: PATHS.HOME,
-		element: <h1>Home</h1>,
+		path: PATHS.PROFILE_DETAILS,
+		element: <Profile />,
 	},
 ];
 
-routes = routes.map((route) => ({
-	...route,
-}));
-
-export const router = createBrowserRouter(routes);
+export const router = createBrowserRouter([
+	{
+		path: PATHS.AUTH,
+		element: <Auth />,
+	},
+	{
+		element: <Authenticated />,
+		children: routes,
+		loader: privateRouteLoader,
+	},
+]);

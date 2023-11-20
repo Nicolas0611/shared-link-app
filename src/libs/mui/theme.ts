@@ -12,6 +12,7 @@ const customTheme = createTheme({
 		},
 		background: {
 			default: '#FAFAFA',
+			paper: 'white',
 		},
 		text: {
 			primary: '#333333',
@@ -26,6 +27,45 @@ const customTheme = createTheme({
 					textTransform: 'none',
 					color: 'white',
 					borderRadius: '0.5rem',
+				},
+				outlined: {
+					textTransform: 'none',
+					color: '#633CFF',
+					borderRadius: '0.5rem',
+				},
+				text: {
+					textTransform: 'none',
+					color: '#633CFF',
+					borderRadius: '0.5rem',
+				},
+			},
+		},
+		MuiTab: {
+			styleOverrides: {
+				root: {
+					textTransform: 'none',
+					'&.Mui-selected': {
+						backgroundColor: '#EFEBFF',
+						borderRadius: '0.5rem',
+						borderBottom: 'unset',
+					},
+					'&.Mui-indicator': {
+						backgroundColor: 'unset',
+					},
+				},
+			},
+		},
+		MuiTextField: {
+			styleOverrides: {
+				root: {
+					backgroundColor: 'white',
+				},
+			},
+		},
+		MuiSelect: {
+			styleOverrides: {
+				root: {
+					backgroundColor: 'white',
 				},
 			},
 		},

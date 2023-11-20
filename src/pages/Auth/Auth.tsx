@@ -6,10 +6,10 @@ import {
 	TextFieldProps,
 } from '@mui/material';
 import { Formik, Form } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import AuthLayout from '../../shared/AuthLayout/AuthLayout';
+import AuthLayout from '../../layout/Auth/auth.layout';
 import { PATHS, HASH_PATHS } from '../../router/paths';
 import {
 	initialLoginInputData,
@@ -20,19 +20,21 @@ import {
 
 import { firebaseAuth } from '../../network/firebaseAuth/firebaseAuth';
 import { useConfirmation } from '../../hooks/useConfirmation';
+import Loader from '../../shared/Loader/loader';
 
 interface InitialValues {
 	email: string;
 	password: string;
 	confirm_password?: string;
 }
-
+//TODO: ADD YUP VALIDATION
 function Auth() {
 	type ActiveTabProps = 'login' | 'signup';
 	const navigate = useNavigate();
 	const { hash } = useLocation();
 	const [activeTab, setActiveTab] = useState<ActiveTabProps>('login');
-	const { handleOnError, handleOnSuccess } = useConfirmation();
+	const { handleOnError, handleOnSuccess, setLoading, loading } =
+		useConfirmation();
 
 	useEffect(() => {
 		if (!hash) {
@@ -45,14 +47,16 @@ function Auth() {
 		}
 	}, [hash]);
 
-	const InitialValues = (hashValue: ActiveTabProps) => {
+	const InitialValues = () => {
 		const initialFormValues = {
 			login: initialLoginInputData,
 			signup: initialRegisterInputData,
 		};
-		return initialFormValues[hashValue];
+		return initialFormValues[activeTab];
 	};
+	const getInitialValues = useMemo(() => InitialValues(), [activeTab]);
 
+	if (loading) return <Loader />;
 	return (
 		<>
 			<Container
@@ -72,7 +76,7 @@ function Auth() {
 				>
 					<Formik
 						enableReinitialize={true}
-						initialValues={InitialValues(activeTab)}
+						initialValues={getInitialValues}
 						validate={(values) => {
 							const errors: Partial<InitialValues> = {};
 							if (values.confirm_password) {
@@ -84,6 +88,7 @@ function Auth() {
 						}}
 						onSubmit={(values, { setSubmitting }) => {
 							const { email, password } = values;
+							setLoading(true);
 							firebaseAuth({
 								authType: activeTab,
 								values: { email, password },
