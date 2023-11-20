@@ -50,9 +50,14 @@ export const getLinks = async (
 					orderByValue: 'data',
 					sort: 'desc',
 				},
-				handleOnSuccess,
+				handleOnSuccess: () => {
+					handleOnSuccess({
+						message: 'Your changes have been successfully saved!',
+					});
+				},
 				handleOnError,
 			});
+			console.log(jobList);
 			const latestLink = Array.isArray(jobList) ? jobList[0] : null;
 			setTemporalLinks(latestLink!);
 			handleOnSuccess({ route: undefined, message: undefined });
