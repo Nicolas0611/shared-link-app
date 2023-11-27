@@ -29,10 +29,10 @@ export type InputConfig<T> = {
 	value: string;
 	required: boolean;
 	label: string;
-	variant?: string; // Optional property, adjust based on your needs
+	variant?: string;
 	onChange: (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-	) => void; // Adjust the event type based on your needs
+	) => void;
 };
 
 export const dataHomeInputs = ({

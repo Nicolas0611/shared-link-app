@@ -19,7 +19,7 @@ export const addCustomLinks = async (
 				data,
 				handleOnSuccess: () => {
 					handleOnSuccess({
-						message: 'Links added successfully',
+						message: 'Your changes have been successfully saved!',
 					});
 				},
 				handleOnError,
@@ -50,11 +50,7 @@ export const getLinks = async (
 					orderByValue: 'data',
 					sort: 'desc',
 				},
-				handleOnSuccess: () => {
-					handleOnSuccess({
-						message: 'Your changes have been successfully saved!',
-					});
-				},
+				handleOnSuccess,
 				handleOnError,
 			});
 			console.log(jobList);
