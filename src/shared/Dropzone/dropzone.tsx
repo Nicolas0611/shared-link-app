@@ -27,7 +27,6 @@ const Dropzone = ({ acceptedFormats, size, variant, name }: DropzoneProps) => {
 		const inputElement = event.target as HTMLInputElement;
 		if (inputElement.files && inputElement.files[0]) {
 			const fileUrl = URL.createObjectURL(inputElement.files[0]);
-
 			setFile(fileUrl);
 			void setFieldValue(name, fileUrl);
 		}

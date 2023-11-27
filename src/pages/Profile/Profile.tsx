@@ -6,9 +6,13 @@ import Dropzone from '../../shared/Dropzone/dropzone';
 import InputHandler from '../../shared/InputHandler/input.handler';
 import { initialProfileValues } from './constants';
 import { dataProfileInputs } from './profile.data';
+import { useConfirmation } from '../../hooks/useConfirmation';
+import { addProfileData } from '../../network/firebaseProfile/ProfileRequests';
 //todo: start profile
 
 function Profile() {
+	const { handleOnError, handleOnSuccess, loading, setLoading } =
+		useConfirmation();
 	return (
 		<Application
 			title="Profile Details"
@@ -17,8 +21,9 @@ function Profile() {
 			<Box display="flex" flexDirection="column" gap={2}>
 				<Formik
 					initialValues={initialProfileValues}
-					onSubmit={(values) => {
-						console.log(values);
+					onSubmit={async (values) => {
+						setLoading(true);
+						await addProfileData(values, handleOnSuccess, handleOnError);
 					}}
 				>
 					{({ values, handleChange }) => {
@@ -83,6 +88,7 @@ function Profile() {
 								</Box>
 								<Box display="flex" justifyContent="end">
 									<Button
+										disabled={loading}
 										type="submit"
 										variant="contained"
 										color="primary"
